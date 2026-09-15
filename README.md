@@ -21,11 +21,12 @@ Answer the prompts: station name, network name, a numbered choice of the Dell’
 - Main page title and network label controlled by `/etc/mmod/config.json` through `setup_config.py`.
 - Random initial password per installation, PBKDF2 password hashes, server-side sessions, CSRF protection and login throttling.
 - MIT license, source, tests, installer and build records.
-- Built for Debian 13
 
-Calls, modes and frequencies reflect configuration/logs, not a direct modem query. Unknown firmware remains unknown. This version does not edit radio settings, restart radios, install missing modes, or implement AllStar control. The collector flags stale data after 30 seconds.
+Calls, modes and frequencies reflect configuration/logs, not a direct modem query. Unknown firmware remains unknown. This version does not edit radio settings, install missing modes, or implement AllStar control. The collector flags stale data after 30 seconds.
 
 ## Development and record
 
 
-Run `python3 -m unittest discover -s tests` to test. Rebuild the single-file installer with `python3 build_single_file.py mmodinstall.sh`. Ten tests and shell syntax checks passed; a fresh installation on a second physical Dell has not been tested. Installation logs are saved at `/var/log/mmod-install-*.log`.
+Run `python3 -m unittest discover -s tests` to test. Rebuild the single-file installer with `python3 build_single_file.py mmodinstall.sh`. Seventeen tests and shell syntax checks passed; a fresh installation on a second physical Dell has not been tested. Installation logs are saved at `/var/log/mmod-install-*.log`.
+
+Administration includes password changes, Start/Stop/Restart/Reload for configured radio services, and whole-Dell reboot with confirmation. Extract `mmod-source.tar.gz` to access the source and tests.

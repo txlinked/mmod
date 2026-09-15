@@ -209,3 +209,9 @@ Radio services continue running. Source and backups remain available. Remove its
 
 ## Validation limits
 
+
+## Administration controls
+
+Sign in and use **Change admin password**. Enter your current password and your new password twice (at least 14 characters). All sessions sign out after the change. The SSH password is separate.
+
+**Radio service controls** apply to installed services listed in the panel. Start restores stopped services; Stop and Restart interrupt radio traffic. Reload only works for services that support it and reports unsupported services without restarting them. **Reboot Dell** restarts the entire computer after you type REBOOT.

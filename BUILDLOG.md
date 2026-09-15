@@ -11,3 +11,9 @@
 ## 2026-09-14 — Footer credit
 
 - Added N3DMC to the shared footer visible on every dashboard view. Rebuilt the GitHub installer and source archive.
+
+## 2026-09-14 — Administration controls
+
+- Added current-password-verified password changes and session invalidation.
+- Added authenticated, CSRF-protected Start/Stop/Restart/Reload for configured radio services and confirmed whole-computer reboot. A constrained root worker performs the operations. Unsupported reloads do not restart services.
+- Seventeen automated tests passed, including authorization, password replacement, duplicate requests, command restrictions and reboot confirmation. Live UI verified; radio PIDs stayed unchanged during dashboard deployment. No live stop or reboot was performed.
