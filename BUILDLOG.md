@@ -22,3 +22,5 @@
 
 - Fresh installations use admin / mmodadmin and optionally choose a different password during setup. Existing credentials are preserved.
 - Web and CLI password changes require at least six characters.
+
+- Renamed the reboot heading/button to Reboot and clarified the note: System reboot.
