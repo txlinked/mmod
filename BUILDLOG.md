@@ -35,3 +35,5 @@
 - Local name index uses SQLite to limit memory; country uses subscriber country or CTY prefix lookup. No per-call Internet queries.
 - Horizontal password-change fields with mobile stacking.
 - Two parser tests passed; Waco endpoint and live overview verified. Actual radio/log buffering remains outside dashboard control.
+
+- Matched requested Current / Last Caller Details and Gateway Activity tables. Two timeslot rows retain last caller when idle; activity uses local timestamps and loss where logged. Missing location stays blank.
