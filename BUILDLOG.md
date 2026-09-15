@@ -28,3 +28,10 @@
 ## 2026-09-15 — Default port 8000
 
 - Changed fresh-install default port to 8000. Existing installations retain their configured port during guided setup. Installer still detects occupied ports and asks the operator to resolve conflicts.
+
+## 2026-09-15 — Live slots and compact password form
+
+- Separate half-second radio monitor and one-second browser radio refresh. TS1/TS2 track starts, late entry, ends and watchdogs independently. Last heard begins at call start.
+- Local name index uses SQLite to limit memory; country uses subscriber country or CTY prefix lookup. No per-call Internet queries.
+- Horizontal password-change fields with mobile stacking.
+- Two parser tests passed; Waco endpoint and live overview verified. Actual radio/log buffering remains outside dashboard control.
