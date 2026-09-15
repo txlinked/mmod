@@ -1,6 +1,6 @@
 # MMDVM Mode Open Dashboard — MMOD
 
-Linux dashboard for MMDVM systems. This distribution includes a portable **Debian 12/13 x86_64 installer for Dell Wyse 3040**, defaulting to port 8080.
+Linux dashboard for MMDVM systems. This distribution includes a portable **Debian 12/13 x86_64 installer for Dell Wyse 3040**, defaulting to port 8000.
 
 Start with **[INSTALL-DELL-3040.md](INSTALL-DELL-3040.md)**. It covers clean Debian setup, installation beside existing radio software, configurable station information, firewall access, initial login, password changes/recovery, themes, backups and rollback.
 
@@ -9,7 +9,7 @@ sudo apt-get update && sudo apt-get install -y curl ca-certificates python3 pyth
 ```
 
 
-Answer the prompts: station name, network name, a numbered choice of the Dell’s detected IP addresses, web port (8080), and admin password. The detected radio settings file and service are displayed; press Enter to keep them. Runs entirely on the Dell. Debian and radio software must be installed separately.
+Answer the prompts: station name, network name, a numbered choice of the Dell’s detected IP addresses, web port (8000), and admin password. The detected radio settings file and service are displayed; press Enter to keep them. Runs entirely on the Dell. Debian and radio software must be installed separately.
 
 ## Included
 

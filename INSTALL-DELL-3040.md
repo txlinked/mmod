@@ -6,7 +6,7 @@ On the Dell running Debian 12 or 13, paste this entire line into the terminal:
 sudo apt-get update && sudo apt-get install -y curl ca-certificates python3 python3-venv iproute2 tar && curl -fsSL https://raw.githubusercontent.com/txlinked/mmod/main/mmodinstall.sh -o mmodinstall.sh && sudo bash mmodinstall.sh
 ```
 
-Answer the questions. Press **Enter** to accept defaults. The installer detects the Dell’s IP addresses, shows the radio settings it found, defaults to port **8080**, and asks you to choose an admin password.
+Answer the questions. Press **Enter** to accept defaults. The installer detects the Dell’s IP addresses, shows the radio settings it found, defaults to port **8000**, and asks you to choose an admin password.
 
 When it finishes, open the dashboard address shown. Select **Administration** and log in as **admin** using the password you chose.
 

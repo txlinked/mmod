@@ -1,6 +1,6 @@
 # Install MMOD on another Dell Wyse 3040
 
-This package installs the MMOD dashboard on **Debian 12 or 13, x86_64**, using systemd and Python. Default web port: **8080**. It includes the smaller overview layout, radio activity above the service panels, and personal theme controls.
+This package installs the MMOD dashboard on **Debian 12 or 13, x86_64**, using systemd and Python. Default web port: **8000**. It includes the smaller overview layout, radio activity above the service panels, and personal theme controls.
 
 
 ## 1. Prepare the Dell
@@ -44,7 +44,7 @@ Replace the example address with the new Dell's actual address, and choose your 
 ```bash
 sudo bash install.sh \
   --bind 192.168.1.50 \
-  --port 8080 \
+  --port 8000 \
   --site "My DMR Repeater" \
   --network "My Radio Club"
 ```
@@ -84,7 +84,7 @@ sudo bash install.sh \
 ```
 
 
-The browser address is `http://DELL_IP:8080/`. Users must be able to reach the selected LAN/ZeroTier address. This release uses HTTP; use it on your trusted LAN or ZeroTier network, not an Internet port-forward. TLS can be added separately.
+The browser address is `http://DELL_IP:8000/`. Users must be able to reach the selected LAN/ZeroTier address. This release uses HTTP; use it on your trusted LAN or ZeroTier network, not an Internet port-forward. TLS can be added separately.
 
 ## 6. Log in
 
@@ -161,7 +161,7 @@ Click **Theme** at the top right. Choose dark, light or system mode, one of five
 ### Change the listening address or port
 
 ```bash
-sudo python3 /opt/mmod/setup_config.py --bind NEW_LOCAL_IP --port 8080
+sudo python3 /opt/mmod/setup_config.py --bind NEW_LOCAL_IP --port 8000
 sudo systemctl restart mmod.service
 ```
 
@@ -172,10 +172,10 @@ Use an actual local IPv4 address instead of `NEW_LOCAL_IP`. Adjust firewall rule
 ```bash
 systemctl status mmod mmod-collector.timer --no-pager
 journalctl -u mmod -u mmod-collector -n 80 --no-pager
-ss -ltn | grep ':8080'
+ss -ltn | grep ':8000'
 ```
 
-Visit `http://DELL_IP:8080/api/health`. A healthy collector returns `{"ok":true,"version":"0.1.0"}`. The installer checks this locally; also test from your browser to verify network/firewall access. If status is stale, inspect the collector journal and INI paths. If login fails, use the password-reset command above.
+Visit `http://DELL_IP:8000/api/health`. A healthy collector returns `{"ok":true,"version":"0.1.0"}`. The installer checks this locally; also test from your browser to verify network/firewall access. If status is stale, inspect the collector journal and INI paths. If login fails, use the password-reset command above.
 
 
 ## 10. Backups and removal
