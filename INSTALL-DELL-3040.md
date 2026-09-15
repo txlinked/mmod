@@ -11,3 +11,5 @@ Answer the questions. Press **Enter** to accept defaults. The installer detects 
 When it finishes, open the dashboard address shown. Select **Administration** and log in as **admin** using the password you chose.
 
 For changing page information or resetting your password later, see [Advanced setup](ADVANCED-SETUP.md).
+
+Fresh installs: username **admin**, starter password **mmodadmin**. Press Enter to keep it during setup, or choose another password. Change it under Administration after signing in. New passwords require at least **6 characters**. Existing passwords are preserved on updates.

@@ -212,6 +212,8 @@ Radio services continue running. Source and backups remain available. Remove its
 
 ## Administration controls
 
-Sign in and use **Change admin password**. Enter your current password and your new password twice (at least 14 characters). All sessions sign out after the change. The SSH password is separate.
+Sign in and use **Change admin password**. Enter your current password and your new password twice (at least 6 characters). All sessions sign out after the change. The SSH password is separate.
 
 **Radio service controls** apply to installed services listed in the panel. Start restores stopped services; Stop and Restart interrupt radio traffic. Reload only works for services that support it and reports unsupported services without restarting them. **Reboot Dell** restarts the entire computer after you type REBOOT.
+
+Fresh installs: username **admin**, starter password **mmodadmin**. Press Enter to keep it during setup, or choose another password. Change it under Administration after signing in. New passwords require at least **6 characters**. Existing passwords are preserved on updates.
