@@ -7,3 +7,7 @@
 - Includes login, password reset, display customization and backup instructions.
 - Single-file installer embeds and verifies its source package.
 - Ten automated tests passed; fresh installation on a second physical Dell remains untested.
+
+## 2026-09-14 — Footer credit
+
+- Added N3DMC to the shared footer visible on every dashboard view. Rebuilt the GitHub installer and source archive.
