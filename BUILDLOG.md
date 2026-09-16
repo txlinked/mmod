@@ -71,3 +71,4 @@ Caller elapsed time uses seconds, minutes, then whole hours. Completed calls dis
 2026-09-16: Activity retains only the latest 15 calls, newest first, independently of the two last-caller rows. Removed the 24-hour activity retention rule.
 
 2026-09-16: User requested 20 activity calls; raised retained and displayed limit to 20.
+2026-09-16: Current callers have a narrow left Slot column; Mode shows only the mode. DMR2YSF route labels support both RF and network calls when explicitly configured.
