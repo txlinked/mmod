@@ -72,3 +72,5 @@ Caller elapsed time uses seconds, minutes, then whole hours. Completed calls dis
 
 2026-09-16: User requested 20 activity calls; raised retained and displayed limit to 20.
 2026-09-16: Current callers have a narrow left Slot column; Mode shows only the mode. DMR2YSF route labels support both RF and network calls when explicitly configured.
+
+2026-09-16: Gateway and All Activity now separate Mode and TS columns. Installer includes display frequency/color-code overrides, mode-route labeling, mobile layout, weekly directories and latest-20 history.
