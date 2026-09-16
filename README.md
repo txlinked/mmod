@@ -11,6 +11,18 @@ sudo apt-get update && sudo apt-get install -y curl ca-certificates python3 pyth
 
 Answer the prompts: station name, network name, a numbered choice of the Dell’s detected IP addresses, web port (8000), and admin password. The detected radio settings file and service are displayed; press Enter to keep them. Runs entirely on the Dell. Debian and radio software must be installed separately.
 
+## Update an existing MMOD computer
+
+Copy and paste this one line into that computer's terminal or SSH session:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/txlinked/mmod/main/mmodupdate.sh -o mmodupdate.sh && sudo bash mmodupdate.sh
+```
+
+Keeps your station name, IP address, port, admin password, caller history and radio settings. Backs up the current dashboard first, updates MMOD, and checks dashboard health. Radio services are not restarted. Refresh your browser afterward. Internet access and sudo are required.
+
+Updates are logged in `/var/log/mmod-update-*.log`; backups are in `/var/backups/mmod-update-*`. A failed update attempts to restore the previous dashboard automatically.
+
 ## Included
 
 - Small overview panels with recent radio traffic placed above service details.

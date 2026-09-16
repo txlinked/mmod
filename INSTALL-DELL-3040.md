@@ -18,3 +18,13 @@ Fresh installs: username **admin**, starter password **mmodadmin**. Press Enter 
 Caller details now include first name and registered city, state, and country from RadioID. The directory downloads in the background after installation and refreshes weekly; names from the existing DMR list remain available until the first download completes. Failed updates retain the last good directory.
 
 The dashboard uses a full-width header, larger activity text, independent timeslot counters that turn red while keyed, and half-second activity polling. Click a callsign to open its QRZ page in a new tab.
+
+## Update later
+
+Copy this line into the MMOD computer’s terminal:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/txlinked/mmod/main/mmodupdate.sh -o mmodupdate.sh && sudo bash mmodupdate.sh
+```
+
+Your settings and password are kept. A dashboard backup is made before updating.
