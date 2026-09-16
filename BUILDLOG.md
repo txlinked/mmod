@@ -47,3 +47,11 @@
 - Added red keyed counters, half-second polling, duration updates, heartbeat, and stale-feed handling for both timeslots.
 - Callsigns link to their QRZ pages in a new tab.
 - Preserved installer prompts, port 8000 default, theme customization, admin password changes, service controls, and N3DMC footer.
+
+## 2026-09-15 — New MMDVM-Host MQTT support and Debian Python
+
+- Detect modern MMDVM-Host installations and subscribe to their configured MQTT log topic when file logs are unavailable. Keep legacy file-log support.
+- Ignore retained MQTT messages and report disconnected or missing log sources instead of silently showing an empty healthy feed.
+- Use the dashboard virtual environment for the radio monitor and include paho-mqtt 2.1.0.
+- Prefer Debian system Python over legacy /usr/local Python overrides during installation.
+- Verified a real KI4BLU TS1 TG3100 transmission through MQTT without restarting the radio service.

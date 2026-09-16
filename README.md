@@ -39,3 +39,5 @@ Live DMR monitoring: TS1 and TS2 update independently about once per second, and
 Caller details now include first name and registered city, state, and country from RadioID. The directory downloads in the background after installation and refreshes weekly; names from the existing DMR list remain available until the first download completes. Failed updates retain the last good directory.
 
 The dashboard uses a full-width header, larger activity text, independent timeslot counters that turn red while keyed, and half-second activity polling. Click a callsign to open its QRZ page in a new tab.
+
+Modern MMDVM-Host installations that publish logs through MQTT are supported automatically when file logs are absent. MMOD subscribes to the configured broker and host/log topic without changing radio settings. Installation uses Debian system Python, avoiding older /usr/local Python overrides.
