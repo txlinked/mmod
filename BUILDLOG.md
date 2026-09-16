@@ -65,3 +65,5 @@
 2026-09-15: Added searchable destination directories, per-source failure status, last-good cache and randomized weekly refresh. Included updater and timer in standalone installer.
 
 Caller elapsed time uses seconds, minutes, then whole hours. Completed calls disappear from current caller and activity tables after 24 hours; the two slot placeholders remain. Radio logs are retained.
+
+2026-09-16: Match delayed DMR2YSF calls through recorded transmission end; persist up to 2,000 enriched completed calls within 24 hours across rolling logs/restarts. Phone tables stack into labeled rows. 29 tests passed.
