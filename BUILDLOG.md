@@ -55,3 +55,5 @@
 - Use the dashboard virtual environment for the radio monitor and include paho-mqtt 2.1.0.
 - Prefer Debian system Python over legacy /usr/local Python overrides during installation.
 - Verified a real KI4BLU TS1 TG3100 transmission through MQTT without restarting the radio service.
+
+- Correct cross-mode caller identity by correlating DMR2YSF source logs with transport ID, mapped target, slot and timestamp. Do not identify a fallback repeater ID as the caller. Verified N5YAI / John / Justin, Texas, USA on Waco TS2.

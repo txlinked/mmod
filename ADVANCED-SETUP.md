@@ -219,3 +219,7 @@ Sign in and use **Change admin password**. Enter your current password and your 
 Fresh installs: username **admin**, starter password **mmodadmin**. Press Enter to keep it during setup, or choose another password. Change it under Administration after signing in. New passwords require at least **6 characters**. Existing passwords are preserved on updates.
 
 Live DMR monitoring: TS1 and TS2 update independently about once per second, and Last heard includes calls as they start. Calls must first appear in the MMDVMHost log. Names use the local DMR ID list or transmitted alias. Country uses an optional local subscriber country field or the CTY callsign prefix database downloaded from https://www.country-files.com/cty/cty.dat during installation; it is not current physical location. Missing information is shown as unavailable. If start/end events are lost, an active call expires after 180 seconds.
+
+
+### DMR2YSF caller identity
+When a bridge substitutes its default DMR ID, MMOD can recover the YSF callsign from its local log. Add `crossmode_sources` to `/etc/mmod/config.json`, with entries containing `log_directory`, `slot`, and `target_offset` matching your DMRGateway rewrite. Example for TS2 with a 7000000 rewrite offset: `{"log_directory":"/home/repeater/DMR2YSF","slot":2,"target_offset":7000000}`. Configure only bridges actually present. The lookup requires a matching transport ID, mapped talkgroup and start timestamp; it never substitutes the repeater owner's identity for an unknown caller.
