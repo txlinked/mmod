@@ -1,4 +1,4 @@
-# MMDVM Mode Open Dashboard — MMOD
+# MMDVM Mode Open Dashboard — MMOD V1.0.0
 
 Linux dashboard for MMDVM systems. This distribution includes a portable **Debian 12/13 x86_64 installer for Dell Wyse 3040**, defaulting to port 8000.
 

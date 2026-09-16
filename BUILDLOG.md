@@ -76,3 +76,5 @@ Caller elapsed time uses seconds, minutes, then whole hours. Completed calls dis
 2026-09-16: Gateway and All Activity now separate Mode and TS columns. Installer includes display frequency/color-code overrides, mode-route labeling, mobile layout, weekly directories and latest-20 history.
 
 2026-09-16: Added standalone mmodupdate.sh and one-line GitHub update instructions for existing computers, preserving local settings and credentials, backing up dashboard/environment and checking HTTP health with rollback on failure.
+
+2026-09-16: Named this release V1.0.0. Dashboard footer, health API, installer, updater and VERSION agree.

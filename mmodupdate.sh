@@ -79,7 +79,7 @@ source="$stage/mmod"
 if ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
   /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
 fi
-for name in app.py radio.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
+for name in app.py radio.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
   install -m 644 "$source/$name" /opt/mmod/
 done
 install -m 644 "$source"/static/* /opt/mmod/static/
@@ -105,7 +105,7 @@ else:raise RuntimeError('Dashboard health check failed')
 PY
 printf '%s\n' "$release" > /opt/mmod/release.txt
 changing=0
-echo "Updated successfully to $release. Refresh your browser."
+echo "MMOD V$(cat /opt/mmod/VERSION) updated successfully ($release). Refresh your browser."
 echo 'Station settings, password, history and radio configuration were preserved.'
 echo "Backup: $backup"
 echo "Log: /var/log/mmod-update-$stamp.log"

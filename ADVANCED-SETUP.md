@@ -175,7 +175,7 @@ journalctl -u mmod -u mmod-collector -n 80 --no-pager
 ss -ltn | grep ':8000'
 ```
 
-Visit `http://DELL_IP:8000/api/health`. A healthy collector returns `{"ok":true,"version":"0.1.0"}`. The installer checks this locally; also test from your browser to verify network/firewall access. If status is stale, inspect the collector journal and INI paths. If login fails, use the password-reset command above.
+Visit `http://DELL_IP:8000/api/health`. A healthy collector returns `{"ok":true,"version":"1.0.0"}`. The installer checks this locally; also test from your browser to verify network/firewall access. If status is stale, inspect the collector journal and INI paths. If login fails, use the password-reset command above.
 
 
 ## 10. Backups and removal
