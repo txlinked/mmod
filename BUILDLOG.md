@@ -63,3 +63,5 @@
 - Persist relevant MQTT call log events to a bounded local history file and reload them after monitor restarts. Ignore debug chatter to avoid unnecessary writes. Recovered Copperas Cove caller history from the radio console.
 
 2026-09-15: Added searchable destination directories, per-source failure status, last-good cache and randomized weekly refresh. Included updater and timer in standalone installer.
+
+Caller elapsed time uses seconds, minutes, then whole hours. Completed calls disappear from current caller and activity tables after 24 hours; the two slot placeholders remain. Radio logs are retained.
