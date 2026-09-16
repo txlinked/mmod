@@ -37,3 +37,13 @@
 - Two parser tests passed; Waco endpoint and live overview verified. Actual radio/log buffering remains outside dashboard control.
 
 - Matched requested Current / Last Caller Details and Gateway Activity tables. Two timeslot rows retain last caller when idle; activity uses local timestamps and loss where logged. Missing location stays blank.
+
+
+## 2026-09-15 — Full-width dashboard and caller details
+
+- Published the approved header navigation, larger body text, and compact layout.
+- Added RadioID city/state/country and first-name lookup with an on-disk index, background initial download, validated weekly refresh, and fallback to the existing DMR name list.
+- Removed separate Country columns; location includes country, using USA for United States.
+- Added red keyed counters, half-second polling, duration updates, heartbeat, and stale-feed handling for both timeslots.
+- Callsigns link to their QRZ pages in a new tab.
+- Preserved installer prompts, port 8000 default, theme customization, admin password changes, service controls, and N3DMC footer.
