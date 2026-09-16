@@ -57,3 +57,5 @@
 - Verified a real KI4BLU TS1 TG3100 transmission through MQTT without restarting the radio service.
 
 - Correct cross-mode caller identity by correlating DMR2YSF source logs with transport ID, mapped target, slot and timestamp. Do not identify a fallback repeater ID as the caller. Verified N5YAI / John / Justin, Texas, USA on Waco TS2.
+
+- Retain completed last callers independently for each slot across rolling activity and restarts. Display Name and Location in Gateway Activity and keep retained callers available in All activity. Label confirmed cross-mode calls DMR2YSF in both tables.
