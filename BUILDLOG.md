@@ -69,3 +69,5 @@ Caller elapsed time uses seconds, minutes, then whole hours. Completed calls dis
 2026-09-16: Match delayed DMR2YSF calls through recorded transmission end; persist up to 2,000 enriched completed calls within 24 hours across rolling logs/restarts. Phone tables stack into labeled rows. 29 tests passed.
 
 2026-09-16: Activity retains only the latest 15 calls, newest first, independently of the two last-caller rows. Removed the 24-hour activity retention rule.
+
+2026-09-16: User requested 20 activity calls; raised retained and displayed limit to 20.
