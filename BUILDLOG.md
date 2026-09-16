@@ -59,3 +59,5 @@
 - Correct cross-mode caller identity by correlating DMR2YSF source logs with transport ID, mapped target, slot and timestamp. Do not identify a fallback repeater ID as the caller. Verified N5YAI / John / Justin, Texas, USA on Waco TS2.
 
 - Retain completed last callers independently for each slot across rolling activity and restarts. Display Name and Location in Gateway Activity and keep retained callers available in All activity. Label confirmed cross-mode calls DMR2YSF in both tables.
+
+- Persist relevant MQTT call log events to a bounded local history file and reload them after monitor restarts. Ignore debug chatter to avoid unnecessary writes. Recovered Copperas Cove caller history from the radio console.
