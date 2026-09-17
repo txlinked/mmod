@@ -78,3 +78,7 @@ Caller elapsed time uses seconds, minutes, then whole hours. Completed calls dis
 2026-09-16: Added standalone mmodupdate.sh and one-line GitHub update instructions for existing computers, preserving local settings and credentials, backing up dashboard/environment and checking HTTP health with rollback on failure.
 
 2026-09-16: Named this release V1.0.0. Dashboard footer, health API, installer, updater and VERSION agree.
+
+## Local log capture — 2026-09-16
+
+Removed MMOD MQTT subscription and paho-mqtt dependency. Added local MMDVM file, GNU screen console, and journal capture with bounded rotation. Installer and updater install the capture service; radio services and broker configuration remain unchanged. Existing station settings and history are preserved.

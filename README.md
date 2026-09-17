@@ -39,7 +39,7 @@ Calls, modes and frequencies reflect configuration/logs, not a direct modem quer
 ## Development and record
 
 
-Run `python3 -m unittest discover -s tests` to test. Rebuild the single-file installer with `python3 build_single_file.py mmodinstall.sh`. Seventeen tests and shell syntax checks passed; a fresh installation on a second physical Dell has not been tested. Installation logs are saved at `/var/log/mmod-install-*.log`.
+Run `python3 -m unittest discover -s tests` to test. Rebuild the single-file installer with `python3 build_single_file.py mmodinstall.sh`. Run the test suite and shell syntax checks before publishing a release. Installation logs are saved at `/var/log/mmod-install-*.log`.
 
 Administration includes password changes, Start/Stop/Restart/Reload for configured radio services, and whole-Dell reboot with confirmation. Extract `mmod-source.tar.gz` to access the source and tests.
 
@@ -52,7 +52,9 @@ Caller details now include first name and registered city, state, and country fr
 
 The dashboard uses a full-width header, larger activity text, independent timeslot counters that turn red while keyed, and half-second activity polling. Click a callsign to open its QRZ page in a new tab.
 
-Modern MMDVM-Host installations that publish logs through MQTT are supported automatically when file logs are absent. MMOD subscribes to the configured broker and host/log topic without changing radio settings. Installation uses Debian system Python, avoiding older /usr/local Python overrides.
+MMOD reads local radio logs and does not connect to MQTT. It uses the configured MMDVM file log first. If no file exists, mmod-log-capture captures the configured radio service’s GNU screen console or system journal without restarting the radio. Captured output is stored in /var/lib/mmod/console/MMDVM.log, with one rotated backup at approximately 5 MiB per file. Console capture requires the radio to emit activity log messages (DisplayLevel 1 or higher). An existing but stale file log must be corrected or explicitly overridden; MMOD cannot recover events the radio never logged.
+
+For a custom file, set radio_log_file in /etc/mmod/config.json to its absolute path. Check capture with sudo journalctl -u mmod-log-capture and /run/mmod/log-source.json. MMOD leaves Mosquitto and the radio’s own MQTT configuration unchanged. Installation uses Debian system Python, avoiding older /usr/local Python overrides.
 
 Weekly destination directories: DMR networks, YSF/FCS, D-Star, P25 and NXDN are searchable under System & modes. The POCSAG/DAPNET entry reports upstream availability and accepts a local public rubric export at /etc/mmod/dapnet-rubrics.json. It does not expose personal pager addresses.
 Lists refresh Sunday between 04:00 and 05:00 in system time via mmod-directories.timer. Failed downloads keep the last successful list. Run sudo systemctl start mmod-directories to refresh now; inspect sudo journalctl -u mmod-directories. Initial downloads run in the background. WPSD/RefCheck attribution is retained in the cache and visible in the directory panel. D-Star host lists supply reflector IDs; no location names are invented. Lists are reference data and do not enable radio modes or change routing.

@@ -20,12 +20,18 @@ for utility in curl python3 tar; do command -v "$utility" >/dev/null || { echo "
 stage=$(mktemp -d /tmp/mmod-update.XXXXXXXX)
 backup=''
 changing=0
+had_capture=0
+[[ ! -f /etc/systemd/system/mmod-log-capture.service ]] || had_capture=1
 cleanup() {
   result=$?
   trap - EXIT
   if [[ $result != 0 && $changing == 1 ]]; then
     echo "Update failed. Restoring dashboard from $backup"
-    systemctl stop mmod mmod-radio mmod-collector.timer mmod-control.timer mmod-collector.service mmod-control.service || true
+    systemctl stop mmod mmod-radio mmod-log-capture.service mmod-collector.timer mmod-control.timer mmod-collector.service mmod-control.service || true
+    if [[ $had_capture == 0 ]]; then
+      systemctl disable mmod-log-capture.service 2>/dev/null || true
+      rm -f /etc/systemd/system/mmod-log-capture.service
+    fi
     tar -xzf "$backup/dashboard.tar.gz" -C /
     tar -xzf "$backup/units.tar.gz" -C /
     systemctl daemon-reload
@@ -57,7 +63,7 @@ with tarfile.open(stage/'source.tar.gz') as archive:
         target.parent.mkdir(parents=True,exist_ok=True)
         target.write_bytes(archive.extractfile(member).read())
 source=stage/'mmod'
-for name in ['app.py','radio.py','collector.py','control.py','directories.py','static/index.html','static/app.js','static/mobile.css','requirements.lock','systemd/mmod.service']:
+for name in ['app.py','radio.py','log_capture.py','systemd/mmod-log-capture.service','collector.py','control.py','directories.py','static/index.html','static/app.js','static/mobile.css','requirements.lock','systemd/mmod.service']:
     if not (source/name).is_file():raise ValueError('Incomplete release: '+name)
 for path in source.glob('*.py'):compile(path.read_text(),str(path),'exec')
 print('Package validation passed')
@@ -74,12 +80,13 @@ tar -czf "$backup/units.tar.gz" /etc/systemd/system/mmod*
 tar -czf "$backup/settings.tar.gz" -C / etc/mmod var/lib/mmod/state
 echo "Backup: $backup"
 changing=1
+systemctl stop mmod-log-capture.service 2>/dev/null || true
 systemctl stop mmod mmod-radio mmod-collector.timer mmod-control.timer mmod-collector.service mmod-control.service
 source="$stage/mmod"
 if ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
   /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
 fi
-for name in app.py radio.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
+for name in app.py radio.py log_capture.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
   install -m 644 "$source/$name" /opt/mmod/
 done
 install -m 644 "$source"/static/* /opt/mmod/static/
@@ -88,6 +95,7 @@ install -m 644 "$source"/systemd/* /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable --now mmod-subscribers.timer mmod-directories.timer mmod-control.timer mmod-collector.timer
 systemctl start mmod-collector.service
+systemctl enable --now mmod-log-capture.service
 systemctl start mmod-radio mmod
 python3 - <<'PY'
 import json,pathlib,time,urllib.request
