@@ -85,4 +85,6 @@ Removed MMOD MQTT subscription and paho-mqtt dependency. Added local MMDVM file,
 
 ## Repeater identity lookup — 2026-09-17
 
-Fixed unresolved repeater IDs by adding RadioID's official repeater directory alongside subscribers. Refresh persisted last callers and activity identities when directories become available, even during idle periods. Repeater records are explicitly labeled; individual operators are not inferred. Weekly atomic downloads retain previous valid data on failure. Installer and updater include the fix and start directory refreshes. All 33 tests passed, including regression coverage for late directory arrival, saved history, corrupt refreshes, subscriber precedence and unknown IDs.
+Fixed unresolved repeater IDs by adding RadioID's official repeater directory alongside subscribers. Refresh persisted last callers and activity identities when directories become available, even during idle periods. Repeater IDs resolve to the registered callsign and subscriber first name where available; individual transmitting operators are not inferred. Weekly atomic downloads retain previous valid data on failure. Installer and updater include the fix and start directory refreshes. All 36 tests passed, including regression coverage for late directory arrival, saved history, corrupt refreshes, subscriber precedence and unknown IDs.
+
+Follow-up: fixed startup scans of oversized logs and moved subscriber indexing off the live loop. Added 10 MiB text-log maintenance, retaining a bounded tail without changing radio configuration.

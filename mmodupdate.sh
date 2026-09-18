@@ -21,13 +21,20 @@ stage=$(mktemp -d /tmp/mmod-update.XXXXXXXX)
 backup=''
 changing=0
 had_capture=0
+had_limit=0
 [[ ! -f /etc/systemd/system/mmod-log-capture.service ]] || had_capture=1
+[[ ! -f /etc/systemd/system/mmod-log-limit.service ]] || had_limit=1
 cleanup() {
   result=$?
   trap - EXIT
   if [[ $result != 0 && $changing == 1 ]]; then
     echo "Update failed. Restoring dashboard from $backup"
     systemctl stop mmod mmod-radio mmod-log-capture.service mmod-collector.timer mmod-control.timer mmod-collector.service mmod-control.service || true
+    systemctl stop mmod-log-limit.timer mmod-log-limit.service 2>/dev/null || true
+    if [[ $had_limit == 0 ]]; then
+      systemctl disable mmod-log-limit.timer 2>/dev/null || true
+      rm -f /etc/systemd/system/mmod-log-limit.service /etc/systemd/system/mmod-log-limit.timer
+    fi
     if [[ $had_capture == 0 ]]; then
       systemctl disable mmod-log-capture.service 2>/dev/null || true
       rm -f /etc/systemd/system/mmod-log-capture.service
@@ -63,7 +70,7 @@ with tarfile.open(stage/'source.tar.gz') as archive:
         target.parent.mkdir(parents=True,exist_ok=True)
         target.write_bytes(archive.extractfile(member).read())
 source=stage/'mmod'
-for name in ['app.py','radio.py','log_capture.py','systemd/mmod-log-capture.service','collector.py','control.py','directories.py','static/index.html','static/app.js','static/mobile.css','requirements.lock','systemd/mmod.service']:
+for name in ['app.py','radio.py','log_capture.py','log_limit.py','systemd/mmod-log-limit.timer','systemd/mmod-log-capture.service','collector.py','control.py','directories.py','static/index.html','static/app.js','static/mobile.css','requirements.lock','systemd/mmod.service']:
     if not (source/name).is_file():raise ValueError('Incomplete release: '+name)
 for path in source.glob('*.py'):compile(path.read_text(),str(path),'exec')
 print('Package validation passed')
@@ -81,12 +88,13 @@ tar -czf "$backup/settings.tar.gz" -C / etc/mmod var/lib/mmod/state
 echo "Backup: $backup"
 changing=1
 systemctl stop mmod-log-capture.service 2>/dev/null || true
+systemctl stop mmod-log-limit.timer mmod-log-limit.service 2>/dev/null || true
 systemctl stop mmod mmod-radio mmod-collector.timer mmod-control.timer mmod-collector.service mmod-control.service
 source="$stage/mmod"
 if ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
   /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
 fi
-for name in app.py radio.py log_capture.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
+for name in app.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
   install -m 644 "$source/$name" /opt/mmod/
 done
 install -m 644 "$source"/static/* /opt/mmod/static/
@@ -97,6 +105,7 @@ systemctl enable --now mmod-subscribers.timer mmod-directories.timer mmod-contro
 systemctl start mmod-collector.service
 systemctl start --no-block mmod-subscribers.service
 systemctl enable --now mmod-log-capture.service
+systemctl enable --now mmod-log-limit.timer
 systemctl start mmod-radio mmod
 python3 - <<'PY'
 import json,pathlib,time,urllib.request
@@ -107,7 +116,8 @@ url='http://'+host+':'+values.get('MMOD_PORT','8000')+'/api/health'
 for attempt in range(30):
     try:
         result=json.load(urllib.request.urlopen(url,timeout=3))
-        if result['ok']:break
+        radio=json.load(urllib.request.urlopen(url.replace('/api/health','/api/radio'),timeout=3))
+        if result['ok'] and not radio.get('error') and time.time()-radio['updated']<5:break
     except (OSError,ValueError):pass
     time.sleep(1)
 else:raise RuntimeError('Dashboard health check failed')
