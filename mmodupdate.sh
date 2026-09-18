@@ -95,6 +95,7 @@ install -m 644 "$source"/systemd/* /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable --now mmod-subscribers.timer mmod-directories.timer mmod-control.timer mmod-collector.timer
 systemctl start mmod-collector.service
+systemctl start --no-block mmod-subscribers.service
 systemctl enable --now mmod-log-capture.service
 systemctl start mmod-radio mmod
 python3 - <<'PY'

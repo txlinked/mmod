@@ -82,3 +82,7 @@ Caller elapsed time uses seconds, minutes, then whole hours. Completed calls dis
 ## Local log capture — 2026-09-16
 
 Removed MMOD MQTT subscription and paho-mqtt dependency. Added local MMDVM file, GNU screen console, and journal capture with bounded rotation. Installer and updater install the capture service; radio services and broker configuration remain unchanged. Existing station settings and history are preserved.
+
+## Repeater identity lookup — 2026-09-17
+
+Fixed unresolved repeater IDs by adding RadioID's official repeater directory alongside subscribers. Refresh persisted last callers and activity identities when directories become available, even during idle periods. Repeater records are explicitly labeled; individual operators are not inferred. Weekly atomic downloads retain previous valid data on failure. Installer and updater include the fix and start directory refreshes. All 33 tests passed, including regression coverage for late directory arrival, saved history, corrupt refreshes, subscriber precedence and unknown IDs.

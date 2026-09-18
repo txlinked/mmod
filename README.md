@@ -50,6 +50,8 @@ Live DMR monitoring: TS1 and TS2 update independently about once per second, and
 
 Caller details now include first name and registered city, state, and country from RadioID. The directory downloads in the background after installation and refreshes weekly; names from the existing DMR list remain available until the first download completes. Failed updates retain the last good directory.
 
+Numeric repeater IDs use RadioID's separate official repeater directory. Repeater entries show their registered callsign and location with “Repeater” in the Name column; they do not identify the person transmitting. Subscriber identities take precedence. Weekly refreshes also repair saved last-caller and activity records without requiring a new call. Unknown IDs remain numeric. Updates request a directory refresh automatically.
+
 The dashboard uses a full-width header, larger activity text, independent timeslot counters that turn red while keyed, and half-second activity polling. Click a callsign to open its QRZ page in a new tab.
 
 MMOD reads local radio logs and does not connect to MQTT. It uses the configured MMDVM file log first. If no file exists, mmod-log-capture captures the configured radio service’s GNU screen console or system journal without restarting the radio. Captured output is stored in /var/lib/mmod/console/MMDVM.log, with one rotated backup at approximately 5 MiB per file. Console capture requires the radio to emit activity log messages (DisplayLevel 1 or higher). An existing but stale file log must be corrected or explicitly overridden; MMOD cannot recover events the radio never logged.
