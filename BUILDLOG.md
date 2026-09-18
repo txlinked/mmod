@@ -90,3 +90,5 @@ Fixed unresolved repeater IDs by adding RadioID's official repeater directory al
 Follow-up: fixed startup scans of oversized logs and moved subscriber indexing off the live loop. Added 10 MiB text-log maintenance, retaining a bounded tail without changing radio configuration.
 
 RadioID subscriber and repeater directories now refresh nightly between 04:00 and 05:00 local time on all installations. Destination/talkgroup lists retain their weekly schedule.
+
+2026-09-18: Suppress confirmed DMR2YSF trailing fragments: matching slot/source/caller/target, late entry within 250 ms of normal end, watchdog within 2 seconds and at least 80 percent packet loss. Remove matching saved duplicate rows and last-caller fragments. Ordinary repeated key-ups remain distinct. Regression suite: 38 tests.
