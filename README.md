@@ -27,7 +27,7 @@ Updates are logged in `/var/log/mmod-update-*.log`; backups are in `/var/backups
 
 Use **Admin Login** in the header. The compact Radio Control panel appears after login. Administrators can add administrator/operator accounts under **Administration → User Management**. Existing passwords remain valid after updating; sign in again if your old session expires.
 
-**Linked Talkgroups** sits below the station banner: public TS1/TS2 links come from BrandMeister subscriptions and confirmed YSF gateway events, never from last-heard activity. Signed-in users can select a destination to fill Radio Control. Controls require the corresponding detected gateway setup.
+**Linked Talkgroups** is a full-width compact bar directly below Repeater online: public TS1/TS2 links come from BrandMeister subscriptions and confirmed YSF gateway events, never from last-heard activity. Signed-in users can select a destination to fill Radio Control. Controls require the corresponding detected gateway setup.
 
 Under **Administration → BrandMeister Setup**, add a masked **v2 API key**, choose **Save & Test**, or remove the saved key. The repeater ID is detected locally. The test checks profile reachability; actual key permissions are checked by BrandMeister when a control is used. Public linked groups do not require a key. Create your key in your [BrandMeister account](https://news.brandmeister.network/introducing-user-api-keys/). It must have access to your repeater. The optional installer prompt can be skipped and completed here later. Updates preserve the key; no key is bundled in this release.
 
@@ -74,3 +74,7 @@ Weekly destination directories: DMR networks, YSF/FCS, D-Star, P25 and NXDN are 
 Lists refresh Sunday between 04:00 and 05:00 in system time via mmod-directories.timer. Failed downloads keep the last successful list. Run sudo systemctl start mmod-directories to refresh now; inspect sudo journalctl -u mmod-directories. Initial downloads run in the background. WPSD/RefCheck attribution is retained in the cache and visible in the directory panel. D-Star host lists supply reflector IDs; no location names are invented. Lists are reference data and do not enable radio modes or change routing.
 
 Radio/MMOD text logs use a 10 MiB threshold checked every 10 seconds by mmod-log-limit.timer. Oversized files are trimmed in place to their newest approximately 5 MiB; old data is discarded, while the saved 20 activity records and last callers are retained. This covers configured MMDVM logs, nearby gateway logs, MMOD console capture and MMOD install/update logs, not unrelated system journals or backup archives. Directory indexing runs in the background so large downloads do not stop live monitoring. Startup reads only a bounded log tail.
+
+Gateway Activity uses country-only labels (USA, UK, and other country names) to save space. Current / Last Caller Details retains the full registered location.
+
+Administration activity is saved locally and accessible using **View admin log**, which opens a popup with the latest 40 entries. The log retains up to 2,000 entries.

@@ -102,3 +102,9 @@ RadioID subscriber and repeater directories now refresh nightly between 04:00 an
 - Local gateway discovery replaces station-specific paths/network indices; missing controls remain Setup required. YSF/FCS controls use local gateway configuration without MQTT.
 - Installer/updater include V2 modules, styles, discovery, link-status timer, and state rollback. All earlier caller identity, duplicate/history, timeslot, directory-refresh and log-limit fixes retained.
 - Validation: 54 automated tests pass, including secret handling, authorization, static controls, configuration discovery, and prior radio/history regressions. No live retuning performed for tests.
+
+### V2.0.0 layout refinement — 2026-09-19
+- Gateway Activity uses country-only labels, with USA/UK normalization. Current caller details keep the full location.
+- Linked Talkgroups now occupies a compact full-width bar immediately below Repeater online, before Radio Control. No reserved sidebar column or JavaScript positioning remains.
+- Updated standalone installer/source package; updater delivers the same assets. Asset version query refreshes cached layout files.
+- Administration log stays saved on the server and opens on demand in a View admin log popup; no inline activity feed.
