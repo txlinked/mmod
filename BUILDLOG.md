@@ -116,3 +116,5 @@ RadioID subscriber and repeater directories now refresh nightly between 04:00 an
 2026-09-19: Slot-specific BrandMeister traffic guard and authenticated Clear dynamic TGs control with explicit confirmation. Clears only selected-slot dynamic groups; static subscriptions unchanged.
 
 2026-09-19: Remove synthetic Fusion slot number. Propagate worker completion/errors and connection failures to linked-group feedback. Bundle all route, timeslot, dynamic-clear, and caller-retention fixes in installer/updater source.
+
+2026-09-19: Linked destinations explicitly show DMR2YSF or native Fusion; refreshed control-result feedback deployed fleet-wide to reachable systems.
