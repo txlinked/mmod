@@ -110,3 +110,9 @@ RadioID subscriber and repeater directories now refresh nightly between 04:00 an
 - Administration log stays saved on the server and opens on demand in a View admin log popup; no inline activity feed.
 
 2026-09-19 V2.0.0: BrandMeister Link now renamed Add static TG; other modes retain Link now. Network service replies 9990/4000 no longer replace retained caller identity; activity remains unchanged.
+
+2026-09-19: Validate native Fusion versus DMR2YSF routing from gateway and peer endpoints. Offer only matching mode controls; show native links as Fusion without a timeslot.
+
+2026-09-19: Slot-specific BrandMeister traffic guard and authenticated Clear dynamic TGs control with explicit confirmation. Clears only selected-slot dynamic groups; static subscriptions unchanged.
+
+2026-09-19: Remove synthetic Fusion slot number. Propagate worker completion/errors and connection failures to linked-group feedback. Bundle all route, timeslot, dynamic-clear, and caller-retention fixes in installer/updater source.
