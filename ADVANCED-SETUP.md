@@ -108,7 +108,7 @@ Log in to the Dell through SSH and run:
 sudo python3 /opt/mmod/admin.py
 ```
 
-Type the new password twice. Use at least **14 characters**. Input is hidden. The command changes the MMOD `admin` password, invalidates existing sessions, and removes the obsolete initial-password note. No service restart is required. Sign in again through Administration.
+Type the new password twice. Use at least **6 characters**. Input is hidden. The command changes the MMOD `admin` password, invalidates existing sessions, and removes the obsolete initial-password note. No service restart is required. Sign in again through Administration.
 
 The same command resets a forgotten MMOD password; it does not require the old one, but does require Linux sudo/root access. It does not change the Dell's Linux/SSH password. There is no password-change form in the web UI in this release.
 
@@ -175,7 +175,7 @@ journalctl -u mmod -u mmod-collector -n 80 --no-pager
 ss -ltn | grep ':8000'
 ```
 
-Visit `http://DELL_IP:8000/api/health`. A healthy collector returns `{"ok":true,"version":"1.0.0"}`. The installer checks this locally; also test from your browser to verify network/firewall access. If status is stale, inspect the collector journal and INI paths. If login fails, use the password-reset command above.
+Visit `http://DELL_IP:8000/api/health`. A healthy collector returns `{"ok":true,"version":"2.0.0"}`. The installer checks this locally; also test from your browser to verify network/firewall access. If status is stale, inspect the collector journal and INI paths. If login fails, use the password-reset command above.
 
 
 ## 10. Backups and removal
@@ -228,3 +228,5 @@ Weekly destination directories: DMR networks, YSF/FCS, D-Star, P25 and NXDN are 
 Lists refresh Sunday between 04:00 and 05:00 in system time via mmod-directories.timer. Failed downloads keep the last successful list. Run sudo systemctl start mmod-directories to refresh now; inspect sudo journalctl -u mmod-directories. Initial downloads run in the background. WPSD/RefCheck attribution is retained in the cache and visible in the directory panel. D-Star host lists supply reflector IDs; no location names are invented. Lists are reference data and do not enable radio modes or change routing.
 
 Caller elapsed time uses seconds, minutes, then whole hours. Current caller details clear after 24 hours; the two slot placeholders remain. Activity independently keeps only the latest 20 calls, newest first, without a time-based expiry. Radio logs are retained.
+
+V2.0.0 adds header login, named users, authenticated radio controls, and optional BrandMeister setup. See the README for supported controls and API-key setup. Missing gateway controls are marked Setup required.

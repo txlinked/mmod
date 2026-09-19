@@ -28,3 +28,9 @@ curl -fsSL https://raw.githubusercontent.com/txlinked/mmod/main/mmodupdate.sh -o
 ```
 
 Your settings and password are kept. A dashboard backup is made before updating.
+
+## V2.0.0 administration
+
+The installer optionally asks for a BrandMeister v2 API key (hidden entry). Skip it to finish later under **Administration → BrandMeister Setup**. No key is needed to show public BrandMeister links. **Save & Test** checks the detected device's public profile; key authorization is checked when a control is used.
+
+Use the header **Admin Login** button. Signed-in operators can use supported radio controls; administrators can add users and configure BrandMeister. Missing gateways show **Setup required**. Manual destination entry and named directory selection are included. The updater preserves existing login, station, radio, history, and API-key settings.

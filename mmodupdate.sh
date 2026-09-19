@@ -22,6 +22,8 @@ backup=''
 changing=0
 had_capture=0
 had_limit=0
+had_links=0
+[[ ! -f /etc/systemd/system/mmod-links.service ]] || had_links=1
 [[ ! -f /etc/systemd/system/mmod-log-capture.service ]] || had_capture=1
 [[ ! -f /etc/systemd/system/mmod-log-limit.service ]] || had_limit=1
 cleanup() {
@@ -39,10 +41,22 @@ cleanup() {
       systemctl disable mmod-log-capture.service 2>/dev/null || true
       rm -f /etc/systemd/system/mmod-log-capture.service
     fi
+    systemctl stop mmod-links.timer mmod-links.service mmod-subscribers.timer mmod-subscribers.service mmod-directories.timer mmod-directories.service 2>/dev/null || true
+    if [[ $had_links == 0 ]]; then
+      systemctl disable mmod-links.timer 2>/dev/null || true
+      rm -f /etc/systemd/system/mmod-links.service /etc/systemd/system/mmod-links.timer
+    fi
+    rm -f /etc/systemd/system/mmod-control.service.d/v2.conf
+    # Stop writers before restoring SQLite and local secrets.
+    rm -f /var/lib/mmod/state/auth.sqlite /var/lib/mmod/state/auth.sqlite-wal /var/lib/mmod/state/auth.sqlite-shm /var/lib/mmod/state/auth.sqlite-journal /etc/mmod/control-profile.json
+    tar -xzf "$backup/settings.tar.gz" -C /
     tar -xzf "$backup/dashboard.tar.gz" -C /
     tar -xzf "$backup/units.tar.gz" -C /
     systemctl daemon-reload
-    systemctl start mmod mmod-radio mmod-collector.timer mmod-control.timer || true
+    systemctl start mmod mmod-radio mmod-collector.timer mmod-control.timer mmod-subscribers.timer mmod-directories.timer || true
+    [[ $had_capture == 0 ]] || systemctl start mmod-log-capture.service || true
+    [[ $had_limit == 0 ]] || systemctl start mmod-log-limit.timer || true
+    [[ $had_links == 0 ]] || systemctl start mmod-links.timer || true
     echo 'Previous dashboard restored. Radio services were not restarted.'
   fi
   case "$stage" in /tmp/mmod-update.*) rm -rf -- "$stage" ;; esac
@@ -70,7 +84,7 @@ with tarfile.open(stage/'source.tar.gz') as archive:
         target.parent.mkdir(parents=True,exist_ok=True)
         target.write_bytes(archive.extractfile(member).read())
 source=stage/'mmod'
-for name in ['app.py','radio.py','log_capture.py','log_limit.py','systemd/mmod-log-limit.timer','systemd/mmod-log-capture.service','collector.py','control.py','directories.py','static/index.html','static/app.js','static/mobile.css','requirements.lock','systemd/mmod.service']:
+for name in ['accounts.py','v2_api.py','v2_radio.py','brandmeister.py','discover_controls.py','link_status.py','systemd/mmod-links.timer','static/v2.js','static/links.js','app.py','radio.py','log_capture.py','log_limit.py','systemd/mmod-log-limit.timer','systemd/mmod-log-capture.service','collector.py','control.py','directories.py','static/index.html','static/app.js','static/mobile.css','requirements.lock','systemd/mmod.service']:
     if not (source/name).is_file():raise ValueError('Incomplete release: '+name)
 for path in source.glob('*.py'):compile(path.read_text(),str(path),'exec')
 print('Package validation passed')
@@ -84,7 +98,16 @@ install -d -m 700 "$backup"
 # Includes the current Python environment for rollback if dependencies change.
 tar -czf "$backup/dashboard.tar.gz" -C / opt/mmod
 tar -czf "$backup/units.tar.gz" /etc/systemd/system/mmod*
-tar -czf "$backup/settings.tar.gz" -C / etc/mmod var/lib/mmod/state
+# Quiesce SQLite and all MMOD writers before the state backup/migration.
+systemctl stop mmod mmod-radio mmod-control.timer mmod-control.service mmod-collector.timer mmod-collector.service
+systemctl stop mmod-links.timer mmod-links.service mmod-log-capture.service mmod-log-limit.timer mmod-log-limit.service mmod-subscribers.timer mmod-subscribers.service mmod-directories.timer mmod-directories.service 2>/dev/null || true
+if ! tar -czf "$backup/settings.tar.gz" -C / etc/mmod var/lib/mmod/state; then
+  systemctl start mmod mmod-radio mmod-control.timer mmod-collector.timer mmod-subscribers.timer mmod-directories.timer
+  [[ $had_capture == 0 ]] || systemctl start mmod-log-capture.service
+  [[ $had_limit == 0 ]] || systemctl start mmod-log-limit.timer
+  [[ $had_links == 0 ]] || systemctl start mmod-links.timer
+  exit 1
+fi
 echo "Backup: $backup"
 changing=1
 systemctl stop mmod-log-capture.service 2>/dev/null || true
@@ -94,13 +117,16 @@ source="$stage/mmod"
 if ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
   /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
 fi
-for name in app.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
+for name in app.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
   install -m 644 "$source/$name" /opt/mmod/
 done
 install -m 644 "$source"/static/* /opt/mmod/static/
 install -m 644 "$source"/systemd/* /opt/mmod/systemd/
 install -m 644 "$source"/systemd/* /etc/systemd/system/
+python3 /opt/mmod/discover_controls.py
 systemctl daemon-reload
+systemctl enable --now mmod-links.timer
+systemctl start --no-block mmod-links.service
 systemctl enable --now mmod-subscribers.timer mmod-directories.timer mmod-control.timer mmod-collector.timer
 systemctl start mmod-collector.service
 systemctl start --no-block mmod-subscribers.service

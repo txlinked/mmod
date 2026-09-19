@@ -1,4 +1,4 @@
-# MMDVM Mode Open Dashboard — MMOD V1.0.0
+# MMDVM Mode Open Dashboard — MMOD V2.0.0
 
 Linux dashboard for MMDVM systems. This distribution includes a portable **Debian 12/13 x86_64 installer for Dell Wyse 3040**, defaulting to port 8000.
 
@@ -9,7 +9,7 @@ sudo apt-get update && sudo apt-get install -y curl ca-certificates python3 pyth
 ```
 
 
-Answer the prompts: station name, network name, a numbered choice of the Dell’s detected IP addresses, web port (8000), and admin password. The detected radio settings file and service are displayed; press Enter to keep them. Runs entirely on the Dell. Debian and radio software must be installed separately.
+Answer the prompts: station name, network name, a numbered choice of the Dell’s detected IP addresses, web port (8000), admin password, and an optional BrandMeister API key. The detected radio settings file and service are displayed; press Enter to keep them. Runs entirely on the Dell. Debian and radio software must be installed separately.
 
 ## Update an existing MMOD computer
 
@@ -23,6 +23,18 @@ Keeps your station name, IP address, port, admin password, caller history and ra
 
 Updates are logged in `/var/log/mmod-update-*.log`; backups are in `/var/backups/mmod-update-*`. A failed update attempts to restore the previous dashboard automatically.
 
+## V2.0.0 radio controls
+
+Use **Admin Login** in the header. The compact Radio Control panel appears after login. Administrators can add administrator/operator accounts under **Administration → User Management**. Existing passwords remain valid after updating; sign in again if your old session expires.
+
+**Linked Talkgroups** sits below the station banner: public TS1/TS2 links come from BrandMeister subscriptions and confirmed YSF gateway events, never from last-heard activity. Signed-in users can select a destination to fill Radio Control. Controls require the corresponding detected gateway setup.
+
+Under **Administration → BrandMeister Setup**, add a masked **v2 API key**, choose **Save & Test**, or remove the saved key. The repeater ID is detected locally. The test checks profile reachability; actual key permissions are checked by BrandMeister when a control is used. Public linked groups do not require a key. Create your key in your [BrandMeister account](https://news.brandmeister.network/introducing-user-api-keys/). It must have access to your repeater. The optional installer prompt can be skipped and completed here later. Updates preserve the key; no key is bundled in this release.
+
+BrandMeister Link adds a **persistent static subscription**; Unlink removes that selected static TG. Other static groups are preserved. Dynamic groups are displayed but cannot be individually unlinked here because the upstream command clears all dynamic groups on the slot. Simplex controls require separate setup. Auto-disconnect applies to YSF/FCS only. YSF/FCS changes briefly restart their shared gateway; Save as default sets its boot destination. Active/stale radio monitoring blocks routing changes. Use the mode/network directory or enter a destination manually.
+
+Requirements: existing compatible radio software, working local activity logs, Debian 12/13 x86_64, systemd, and outbound HTTPS for directories/BrandMeister. The installer detects supported gateway paths and marks missing controls as Setup required. No MQTT connection is used by MMOD. Radio configuration is changed only when you use supported controls; installation does not retune or restart radio services.
+
 ## Included
 
 - Small overview panels with recent radio traffic placed above service details.
@@ -34,7 +46,7 @@ Updates are logged in `/var/log/mmod-update-*.log`; backups are in `/var/backups
 - Starter password mmodadmin for new installations, PBKDF2 password hashes, server-side sessions, CSRF protection and login throttling.
 - MIT license, source, tests, installer and build records.
 
-Calls, modes and frequencies reflect configuration/logs, not a direct modem query. Unknown firmware remains unknown. This version does not edit radio settings, install missing modes, or implement AllStar control. The collector flags stale data after 30 seconds.
+Calls, modes and frequencies reflect configuration/logs, not a direct modem query. Unknown firmware remains unknown. V2 offers authenticated controls for detected BrandMeister and YSF/FCS gateways. Other modes are listed as Setup required; it does not install missing radio software or implement AllStar control. The collector flags stale data after 30 seconds.
 
 ## Development and record
 

@@ -92,3 +92,13 @@ Follow-up: fixed startup scans of oversized logs and moved subscriber indexing o
 RadioID subscriber and repeater directories now refresh nightly between 04:00 and 05:00 local time on all installations. Destination/talkgroup lists retain their weekly schedule.
 
 2026-09-18: Suppress confirmed DMR2YSF trailing fragments: matching slot/source/caller/target, late entry within 250 ms of normal end, watchdog within 2 seconds and at least 80 percent packet loss. Remove matching saved duplicate rows and last-caller fragments. Ordinary repeated key-ups remain distinct. Regression suite: 38 tests.
+
+## 2026-09-19 — V2.0.0
+
+- Header login dialog; compact authenticated Radio Control panel with manual destination and named directory selection.
+- Named administrator/operator accounts with password changes, CSRF checks, login throttling, bounded audit, and existing-password migration.
+- Public TS1/TS2 confirmed linked destinations; sidebar below the station banner and responsive placement.
+- Optional administrator-only BrandMeister key storage and installer prompt, public profile lookup, targeted static TG link/unlink. Key permissions are checked by upstream control requests, not the public profile test.
+- Local gateway discovery replaces station-specific paths/network indices; missing controls remain Setup required. YSF/FCS controls use local gateway configuration without MQTT.
+- Installer/updater include V2 modules, styles, discovery, link-status timer, and state rollback. All earlier caller identity, duplicate/history, timeslot, directory-refresh and log-limit fixes retained.
+- Validation: 54 automated tests pass, including secret handling, authorization, static controls, configuration discovery, and prior radio/history regressions. No live retuning performed for tests.
