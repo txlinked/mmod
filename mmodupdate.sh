@@ -53,6 +53,8 @@ cleanup() {
     tar -xzf "$backup/dashboard.tar.gz" -C /
     tar -xzf "$backup/units.tar.gz" -C /
     systemctl daemon-reload
+systemctl enable --now mmod-allstar-directory.timer
+systemctl start --no-block mmod-allstar-directory.service
     systemctl start mmod mmod-radio mmod-collector.timer mmod-control.timer mmod-subscribers.timer mmod-directories.timer || true
     [[ $had_capture == 0 ]] || systemctl start mmod-log-capture.service || true
     [[ $had_limit == 0 ]] || systemctl start mmod-log-limit.timer || true
@@ -117,7 +119,7 @@ source="$stage/mmod"
 if ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
   /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
 fi
-for name in app.py allstar.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
+for name in app.py allstar.py allstar-directory.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
   install -m 644 "$source/$name" /opt/mmod/
 done
 install -m 644 "$source"/static/* /opt/mmod/static/
@@ -125,6 +127,8 @@ install -m 644 "$source"/systemd/* /opt/mmod/systemd/
 install -m 644 "$source"/systemd/* /etc/systemd/system/
 python3 /opt/mmod/discover_controls.py
 systemctl daemon-reload
+systemctl enable --now mmod-allstar-directory.timer
+systemctl start --no-block mmod-allstar-directory.service
 systemctl enable --now mmod-links.timer
 systemctl start --no-block mmod-links.service
 systemctl enable --now mmod-subscribers.timer mmod-directories.timer mmod-control.timer mmod-collector.timer

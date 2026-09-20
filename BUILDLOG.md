@@ -120,3 +120,5 @@ RadioID subscriber and repeater directories now refresh nightly between 04:00 an
 2026-09-19: Linked destinations explicitly show DMR2YSF or native Fusion; refreshed control-result feedback deployed fleet-wide to reachable systems.
 
 2026-09-19: AllStar multi-node administration, authenticated control, top controls, compact stacked status, per-link red keying, one-second polling and last-keyed ordering. Installer/updater include AllStar module and preserve existing state.
+
+2026-09-19: Discover YSF caller log paths and DMR rewrite ranges from verified local bridge routing during install/update. Reset fallback repeater identity before caller enrichment. Include nightly AllStar node descriptions. No station or AllStar credentials bundled.
