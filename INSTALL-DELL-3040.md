@@ -34,3 +34,8 @@ Your settings and password are kept. A dashboard backup is made before updating.
 The installer optionally asks for a BrandMeister v2 API key (hidden entry). Skip it to finish later under **Administration → BrandMeister Setup**. No key is needed to show public BrandMeister links. **Save & Test** checks the detected device's public profile; key authorization is checked when a control is used.
 
 Use the header **Admin Login** button. Signed-in operators can use supported radio controls; administrators can add users and configure BrandMeister. Missing gateways show **Setup required**. Manual destination entry and named directory selection are included. The updater preserves existing login, station, radio, history, and API-key settings.
+
+
+## AllStarLink node control
+
+Open AllStarLink to view all configured nodes on one page. In Administration → AllStar nodes, add the node number, display name, private/ZeroTier AMI address, port, username and password. Existing passwords stay hidden; leave blank to retain them. Only administrators can add or remove nodes; signed-in operators can link, monitor and unlink. No node credentials are bundled. Updates preserve saved node settings. Keyed rows turn red and move above recently keyed rows, with one-second polling. Last-keyed ordering tracks activity observed since dashboard startup.

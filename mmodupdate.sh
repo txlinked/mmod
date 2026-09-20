@@ -84,7 +84,7 @@ with tarfile.open(stage/'source.tar.gz') as archive:
         target.parent.mkdir(parents=True,exist_ok=True)
         target.write_bytes(archive.extractfile(member).read())
 source=stage/'mmod'
-for name in ['accounts.py','v2_api.py','v2_radio.py','brandmeister.py','discover_controls.py','link_status.py','systemd/mmod-links.timer','static/v2.js','static/links.js','app.py','radio.py','log_capture.py','log_limit.py','systemd/mmod-log-limit.timer','systemd/mmod-log-capture.service','collector.py','control.py','directories.py','static/index.html','static/app.js','static/mobile.css','requirements.lock','systemd/mmod.service']:
+for name in ['allstar.py','static/allstar.js','static/allstar.css','accounts.py','v2_api.py','v2_radio.py','brandmeister.py','discover_controls.py','link_status.py','systemd/mmod-links.timer','static/v2.js','static/links.js','app.py','radio.py','log_capture.py','log_limit.py','systemd/mmod-log-limit.timer','systemd/mmod-log-capture.service','collector.py','control.py','directories.py','static/index.html','static/app.js','static/mobile.css','requirements.lock','systemd/mmod.service']:
     if not (source/name).is_file():raise ValueError('Incomplete release: '+name)
 for path in source.glob('*.py'):compile(path.read_text(),str(path),'exec')
 print('Package validation passed')
@@ -117,7 +117,7 @@ source="$stage/mmod"
 if ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
   /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
 fi
-for name in app.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
+for name in app.py allstar.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
   install -m 644 "$source/$name" /opt/mmod/
 done
 install -m 644 "$source"/static/* /opt/mmod/static/

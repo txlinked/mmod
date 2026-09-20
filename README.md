@@ -46,7 +46,7 @@ Requirements: existing compatible radio software, working local activity logs, D
 - Starter password mmodadmin for new installations, PBKDF2 password hashes, server-side sessions, CSRF protection and login throttling.
 - MIT license, source, tests, installer and build records.
 
-Calls, modes and frequencies reflect configuration/logs, not a direct modem query. Unknown firmware remains unknown. V2 offers authenticated controls for detected BrandMeister and YSF/FCS gateways. Other modes are listed as Setup required; it does not install missing radio software or implement AllStar control. The collector flags stale data after 30 seconds.
+Calls, modes and frequencies reflect configuration/logs, not a direct modem query. Unknown firmware remains unknown. V2 offers authenticated controls for detected BrandMeister and YSF/FCS gateways. Other modes are listed as Setup required; it does not install missing radio software ; AllStar control is configured separately under Administration. The collector flags stale data after 30 seconds.
 
 ## Development and record
 
@@ -81,3 +81,8 @@ Administration activity is saved locally and accessible using **View admin log**
 
 
 Latest V2 fixes: native Fusion and DMR2YSF controls are offered only when their configured gateway endpoints match. Native Fusion appears separately without a DMR timeslot. BrandMeister subscription changes check only the selected timeslot. Signed-in users can clear all dynamic TGs on a selected slot with confirmation; static groups remain unchanged. Control status now reports completion, worker errors, and connection failures in the linked-groups panel.
+
+
+## AllStarLink node control
+
+Open AllStarLink to view all configured nodes on one page. In Administration → AllStar nodes, add the node number, display name, private/ZeroTier AMI address, port, username and password. Existing passwords stay hidden; leave blank to retain them. Only administrators can add or remove nodes; signed-in operators can link, monitor and unlink. No node credentials are bundled. Updates preserve saved node settings. Keyed rows turn red and move above recently keyed rows, with one-second polling. Last-keyed ordering tracks activity observed since dashboard startup.

@@ -118,3 +118,5 @@ RadioID subscriber and repeater directories now refresh nightly between 04:00 an
 2026-09-19: Remove synthetic Fusion slot number. Propagate worker completion/errors and connection failures to linked-group feedback. Bundle all route, timeslot, dynamic-clear, and caller-retention fixes in installer/updater source.
 
 2026-09-19: Linked destinations explicitly show DMR2YSF or native Fusion; refreshed control-result feedback deployed fleet-wide to reachable systems.
+
+2026-09-19: AllStar multi-node administration, authenticated control, top controls, compact stacked status, per-link red keying, one-second polling and last-keyed ordering. Installer/updater include AllStar module and preserve existing state.
