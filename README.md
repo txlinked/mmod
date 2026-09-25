@@ -43,7 +43,7 @@ Requirements: existing compatible radio software, working local activity logs, D
 - Five-second collector with snapshots in RAM, unprivileged FastAPI/Uvicorn web service and systemd startup.
 - Per-browser dark/light/system themes, five accents and two density choices.
 - Main page title and network label controlled by `/etc/mmod/config.json` through `setup_config.py`.
-- Starter password mmodadmin for new installations, PBKDF2 password hashes, server-side sessions, CSRF protection and login throttling.
+- Installer-selected administrator credentials, PBKDF2 password hashes, server-side sessions, CSRF protection and login throttling.
 - MIT license, source, tests, installer and build records.
 
 Calls, modes and frequencies reflect configuration/logs, not a direct modem query. Unknown firmware remains unknown. V2 offers authenticated controls for detected BrandMeister and YSF/FCS gateways. Other modes are listed as Setup required; it does not install missing radio software ; AllStar control is configured separately under Administration. The collector flags stale data after 30 seconds.
@@ -55,7 +55,7 @@ Run `python3 -m unittest discover -s tests` to test. Rebuild the single-file ins
 
 Administration includes password changes, Start/Stop/Restart/Reload for configured radio services, and system reboot with confirmation. Extract `mmod-source.tar.gz` to access the source and tests.
 
-Fresh installs: username **admin**, starter password **mmodadmin**. Press Enter to keep it during setup, or choose another password. Change it under Administration after signing in. New passwords require at least **6 characters**. Existing passwords are preserved on updates.
+Fresh installs: choose administrator credentials during setup. Existing credentials are preserved on updates.
 
 Live DMR monitoring: TS1 and TS2 update independently about once per second, and Last heard includes calls as they start. Calls must first appear in the MMDVMHost log. Names use the local DMR ID list or transmitted alias. Country uses an optional local subscriber country field or the CTY callsign prefix database downloaded from https://www.country-files.com/cty/cty.dat during installation; it is not current physical location. Missing information is shown as unavailable. If start/end events are lost, an active call expires after 180 seconds.
 
@@ -99,3 +99,6 @@ Local AllStar discovery reads rpt.conf and manager.conf (including local include
 ## Radio configuration ownership
 
 MMOD does not create YSFGateway/MMDVM configuration overrides or write radio INI settings. YSF/FCS link and unlink use existing local MQTT or UDP remote commands, with destination confirmation. No radio INIs or startup overrides are written. Save-as-default and unsupported enable/disable actions remain unavailable. BrandMeister API controls remain available. DMRGateway remote control must already be configured by the radio administrator. Dynamic timeout is limited to supported controls and excludes AllStar.
+
+### Static or dynamic YSF links
+Linked YSF/FCS rooms default to Dynamic, including the gateway startup room. Logged-in operators can select Make static to exclude a destination from MMOD inactivity disconnection, or Make dynamic to restart its timer. Choices persist in dashboard state and do not edit radio INIs. DMR2YSF timers reset on local RF activity, not network traffic. Native Fusion requires a compatible RF activity feed before automatic expiry is enabled. Static BrandMeister subscriptions and AllStar remain excluded.

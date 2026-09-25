@@ -12,7 +12,7 @@ When it finishes, open the dashboard address shown. Select **Administration** an
 
 For changing page information or resetting your password later, see [Advanced setup](ADVANCED-SETUP.md).
 
-Fresh installs: username **admin**, starter password **mmodadmin**. Press Enter to keep it during setup, or choose another password. Change it under Administration after signing in. New passwords require at least **6 characters**. Existing passwords are preserved on updates.
+Fresh installs: username **admin**, with a unique generated password stored root-only in `/etc/mmod/initial-admin.txt`. Use `sudo cat /etc/mmod/initial-admin.txt` to read it, or choose another password during setup. Change it under Administration after signing in. New passwords require at least **6 characters**. Existing passwords are preserved on updates.
 
 
 Caller details now include first name and registered city, state, and country from RadioID. The directory downloads in the background after installation and refreshes weekly; names from the existing DMR list remain available until the first download completes. Failed updates retain the last good directory.

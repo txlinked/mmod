@@ -10,3 +10,10 @@ Restored native YSF/FCS link/unlink using existing local MQTT or UDP interfaces.
 
 ### V2.0.2 control permission correction
 Allow dashboard requests when gateway INIs are private to the root worker; retain worker-side configuration validation. Idle last-caller rows no longer prevent inactivity processing. Correct native-control confirmation wording.
+
+### V2.0.2 explicit gateway static policy
+Removed implicit startup-room timeout exemption. Added persistent authenticated Static/Dynamic controls on linked gateway destinations; switching to Dynamic starts a fresh timer. Worker checks policy again before an automatic unlink.
+
+## V2.0.2 follow-up fixes
+
+DMR2YSF native link and unlink guard only the selected timeslot; automatic expiry uses the same guard. Linked destinations wrap without the Static/Dynamic badge squeezing text. Explicit gateway Static/Dynamic choices persist, while dynamic defaults expire using the configured RF inactivity timer. Native gateway MQTT control uses the existing local broker and configuration, unique clean-session clients and non-retained commands. Fresh installs generate a unique administrator password; updates preserve credentials.
