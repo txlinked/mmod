@@ -4,3 +4,6 @@ V2.0.0 includes radio monitoring, authenticated administration, AllStar node con
 
 
 V2.0.1: dashboard-only platform detection, local AllStar discovery using existing AMI access, RF inactivity timeout packaging, AllStar SawStat timers, compressed assets and page persistence. ARM/WPSD paths require hardware validation.
+
+## V2.0.2
+Restored native YSF/FCS link/unlink using existing local MQTT or UDP interfaces. Commands are not retained; gateway host replies confirm the destination. Monitoring remains independent of MQTT. No radio configuration overrides, INI writes, or gateway restarts. Fixed idle caller rows incorrectly blocking control commands.

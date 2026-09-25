@@ -1,4 +1,4 @@
-# MMDVM Mode Open Dashboard — MMOD V2.0.1
+# MMDVM Mode Open Dashboard — MMOD V2.0.2
 
 Linux dashboard for MMDVM systems. This distribution includes a dashboard-only **Debian-family installer for x86-64 and ARM**, defaulting to port 8000.
 
@@ -23,7 +23,7 @@ Keeps your station name, IP address, port, admin password, caller history and ra
 
 Updates are logged in `/var/log/mmod-update-*.log`; backups are in `/var/backups/mmod-update-*`. A failed update attempts to restore the previous dashboard automatically.
 
-## V2.0.1 radio controls
+## V2.0.2 radio controls
 
 Use **Admin Login** in the header. The compact Radio Control panel appears after login. Administrators can add administrator/operator accounts under **Administration → User Management**. Existing passwords remain valid after updating; sign in again if your old session expires.
 
@@ -88,7 +88,7 @@ Latest V2 fixes: native Fusion and DMR2YSF controls are offered only when their 
 Open AllStarLink to view all configured nodes on one page. In Administration → AllStar nodes, add the node number, display name, private/ZeroTier AMI address, port, username and password. Existing passwords stay hidden; leave blank to retain them. Only administrators can add or remove nodes; signed-in operators can link, monitor and unlink. No node credentials are bundled. Updates preserve saved node settings. Keyed rows turn red and move above recently keyed rows, with one-second polling. Last-keyed ordering tracks activity observed since dashboard startup.
 
 
-## V2.0.1 dashboard-only installer
+## V2.0.2 dashboard-only installer
 
 Detects Debian-family Linux on x86-64, ARM64 and ARMv7/v8 with Python 3.10+ and systemd. No radio software or firmware is installed. ARM and WPSD support requires real-device validation; existing x86-64 deployments are the tested baseline. Unsupported platforms stop with an explanation.
 
@@ -98,4 +98,4 @@ Local AllStar discovery reads rpt.conf and manager.conf (including local include
 
 ## Radio configuration ownership
 
-MMOD does not create YSFGateway/MMDVM configuration overrides or write radio INI settings. YSF/FCS controls requiring those changes are unavailable; monitoring remains supported. BrandMeister API controls remain available. DMRGateway remote control must already be configured by the radio administrator. Dynamic timeout is limited to supported controls and excludes AllStar.
+MMOD does not create YSFGateway/MMDVM configuration overrides or write radio INI settings. YSF/FCS link and unlink use existing local MQTT or UDP remote commands, with destination confirmation. No radio INIs or startup overrides are written. Save-as-default and unsupported enable/disable actions remain unavailable. BrandMeister API controls remain available. DMRGateway remote control must already be configured by the radio administrator. Dynamic timeout is limited to supported controls and excludes AllStar.
