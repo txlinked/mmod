@@ -4,7 +4,7 @@ set -euo pipefail
 export PATH=/usr/sbin:/usr/bin:/sbin:/bin
 if [[ "${1:-}" == --help ]]; then
   echo 'sudo bash mmodupdate.sh [--verify-only]'
-  echo 'Updates MMOD only. Preserves station settings, passwords, history and radio configuration.'
+  echo 'Updates the MMOD dashboard only. Preserves station settings, passwords, history and radio configuration.'
   exit 0
 fi
 verify=0
@@ -86,12 +86,15 @@ with tarfile.open(stage/'source.tar.gz') as archive:
         target.parent.mkdir(parents=True,exist_ok=True)
         target.write_bytes(archive.extractfile(member).read())
 source=stage/'mmod'
-for name in ['allstar.py','static/allstar.js','static/allstar.css','accounts.py','v2_api.py','v2_radio.py','brandmeister.py','discover_controls.py','link_status.py','systemd/mmod-links.timer','static/v2.js','static/links.js','app.py','radio.py','log_capture.py','log_limit.py','systemd/mmod-log-limit.timer','systemd/mmod-log-capture.service','collector.py','control.py','directories.py','static/index.html','static/app.js','static/mobile.css','requirements.lock','systemd/mmod.service']:
+for name in ['idle_links.py','allstar.py','static/allstar.js','static/allstar.css','accounts.py','v2_api.py','v2_radio.py','brandmeister.py','discover_controls.py','link_status.py','systemd/mmod-links.timer','static/v2.js','static/links.js','app.py','radio.py','log_capture.py','log_limit.py','systemd/mmod-log-limit.timer','systemd/mmod-log-capture.service','collector.py','control.py','directories.py','static/index.html','static/app.js','static/mobile.css','requirements.lock','systemd/mmod.service']:
     if not (source/name).is_file():raise ValueError('Incomplete release: '+name)
 for path in source.glob('*.py'):compile(path.read_text(),str(path),'exec')
 print('Package validation passed')
 PY
 [[ $verify == 0 ]] || { echo "Verified release $release; nothing installed."; exit 0; }
+# Dashboard-only update; existing radio software is managed separately.
+python3 "$stage/mmod/platform_detect.py"
+platform_kind=$(python3 "$stage/mmod/platform_detect.py" --kind)
 stamp=$(date -u +%Y%m%dT%H%M%SZ)
 umask 077
 exec > >(tee -a "/var/log/mmod-update-$stamp.log") 2>&1
@@ -119,13 +122,20 @@ source="$stage/mmod"
 if ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
   /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
 fi
-for name in app.py allstar.py allstar-directory.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
+for name in platform_detect.py discover_allstar.py idle_links.py app.py allstar.py allstar-directory.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
   install -m 644 "$source/$name" /opt/mmod/
 done
 install -m 644 "$source"/static/* /opt/mmod/static/
 install -m 644 "$source"/systemd/* /opt/mmod/systemd/
 install -m 644 "$source"/systemd/* /etc/systemd/system/
-python3 /opt/mmod/discover_controls.py
+if [[ "$platform_kind" == wpsd ]]; then
+  touch /etc/mmod/wpsd-monitor-only
+  echo 'WPSD: dashboard monitoring only; radio configuration and log management remain with WPSD.'
+  printf '{}\n' > /etc/mmod/control-profile.json
+else
+  python3 /opt/mmod/discover_controls.py
+fi
+/opt/mmod/venv/bin/python /opt/mmod/discover_allstar.py
 systemctl daemon-reload
 systemctl enable --now mmod-allstar-directory.timer
 systemctl start --no-block mmod-allstar-directory.service
@@ -134,8 +144,8 @@ systemctl start --no-block mmod-links.service
 systemctl enable --now mmod-subscribers.timer mmod-directories.timer mmod-control.timer mmod-collector.timer
 systemctl start mmod-collector.service
 systemctl start --no-block mmod-subscribers.service
-systemctl enable --now mmod-log-capture.service
-systemctl enable --now mmod-log-limit.timer
+[[ "$platform_kind" == wpsd ]] || systemctl enable --now mmod-log-capture.service
+[[ "$platform_kind" == wpsd ]] || systemctl enable --now mmod-log-limit.timer
 systemctl start mmod-radio mmod
 python3 - <<'PY'
 import json,pathlib,time,urllib.request
@@ -158,3 +168,15 @@ echo "MMOD V$(cat /opt/mmod/VERSION) updated successfully ($release). Refresh yo
 echo 'Station settings, password, history and radio configuration were preserved.'
 echo "Backup: $backup"
 echo "Log: /var/log/mmod-update-$stamp.log"
+
+# Remove only legacy MMOD runtime overrides; original radio INIs are untouched.
+for unit in ysfgateway mmdvmhost mmdvm-host; do
+  override="/run/systemd/system/$unit.service.d/90-mmod.conf"
+  if [ -f "$override" ]; then
+    mkdir -p /var/backups/mmod-legacy-overrides
+    cp -p "$override" "/var/backups/mmod-legacy-overrides/$unit-$(date +%s).conf"
+    rm -f "$override"
+    echo "Removed legacy MMOD override for $unit. Restart that radio service when idle to use its original configuration."
+  fi
+done
+systemctl daemon-reload

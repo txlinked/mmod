@@ -29,6 +29,14 @@ curl -fsSL https://raw.githubusercontent.com/txlinked/mmod/main/mmodupdate.sh -o
 
 Your settings and password are kept. A dashboard backup is made before updating.
 
+## Dashboard-only installation
+
+The installer and updater install MMOD and its Python runtime dependencies only. They do not install or compile MMDVMHost, radio gateways, cross-mode converters, firmware, or AllStar/Asterisk. Missing modes remain Setup required. Existing radio configuration and software are preserved.
+
+## Dynamic talkgroup inactivity
+
+Confirmed non-static links expire after 15 minutes without local RF activity. Incoming network traffic does not reset the timer. Static BrandMeister subscriptions and saved gateway defaults are preserved. BrandMeister API control requires a configured key; clearing dynamics affects the entire slot, so all dynamic TGs on that slot must be idle. The worker waits for idle radio and fresh monitoring data. Native Fusion requires a compatible RF activity source.
+
 ## V2.0.0 administration
 
 The installer optionally asks for a BrandMeister v2 API key (hidden entry). Skip it to finish later under **Administration → BrandMeister Setup**. No key is needed to show public BrandMeister links. **Save & Test** checks the detected device's public profile; key authorization is checked when a control is used.

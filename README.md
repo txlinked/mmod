@@ -1,6 +1,6 @@
-# MMDVM Mode Open Dashboard — MMOD V2.0.0
+# MMDVM Mode Open Dashboard — MMOD V2.0.1
 
-Linux dashboard for MMDVM systems. This distribution includes a portable **Debian 12/13 x86_64 installer for Dell Wyse 3040**, defaulting to port 8000.
+Linux dashboard for MMDVM systems. This distribution includes a dashboard-only **Debian-family installer for x86-64 and ARM**, defaulting to port 8000.
 
 Start with **[INSTALL-DELL-3040.md](INSTALL-DELL-3040.md)**. It covers clean Debian setup, installation beside existing radio software, configurable station information, firewall access, initial login, password changes/recovery, themes, backups and rollback.
 
@@ -9,7 +9,7 @@ sudo apt-get update && sudo apt-get install -y curl ca-certificates python3 pyth
 ```
 
 
-Answer the prompts: station name, network name, a numbered choice of the Dell’s detected IP addresses, web port (8000), admin password, and an optional BrandMeister API key. The detected radio settings file and service are displayed; press Enter to keep them. Runs entirely on the Dell. Debian and radio software must be installed separately.
+Answer the prompts: station name, network name, a numbered choice of the computer’s detected IP addresses, web port (8000), admin password, and an optional BrandMeister API key. The detected radio settings file and service are displayed; press Enter to keep them. Runs locally on the selected computer. Debian and radio software must be installed separately.
 
 ## Update an existing MMOD computer
 
@@ -23,7 +23,7 @@ Keeps your station name, IP address, port, admin password, caller history and ra
 
 Updates are logged in `/var/log/mmod-update-*.log`; backups are in `/var/backups/mmod-update-*`. A failed update attempts to restore the previous dashboard automatically.
 
-## V2.0.0 radio controls
+## V2.0.1 radio controls
 
 Use **Admin Login** in the header. The compact Radio Control panel appears after login. Administrators can add administrator/operator accounts under **Administration → User Management**. Existing passwords remain valid after updating; sign in again if your old session expires.
 
@@ -33,7 +33,7 @@ Under **Administration → BrandMeister Setup**, add a masked **v2 API key**, ch
 
 BrandMeister Link adds a **persistent static subscription**; Unlink removes that selected static TG. Other static groups are preserved. Dynamic groups are displayed but cannot be individually unlinked here because the upstream command clears all dynamic groups on the slot. Simplex controls require separate setup. Auto-disconnect applies to YSF/FCS only. YSF/FCS changes briefly restart their shared gateway; Save as default sets its boot destination. Active/stale radio monitoring blocks routing changes. Use the mode/network directory or enter a destination manually.
 
-Requirements: existing compatible radio software, working local activity logs, Debian 12/13 x86_64, systemd, and outbound HTTPS for directories/BrandMeister. The installer detects supported gateway paths and marks missing controls as Setup required. No MQTT connection is used by MMOD. Radio configuration is changed only when you use supported controls; installation does not retune or restart radio services.
+Requirements: existing compatible radio software, working local activity logs, Debian-family Linux, Python 3.10+, systemd, and outbound HTTPS for directories/BrandMeister. The installer detects supported gateway paths and marks missing controls as Setup required. No MQTT connection is used by MMOD. Radio configuration is changed only when you use supported controls; installation does not retune or restart radio services.
 
 ## Included
 
@@ -53,7 +53,7 @@ Calls, modes and frequencies reflect configuration/logs, not a direct modem quer
 
 Run `python3 -m unittest discover -s tests` to test. Rebuild the single-file installer with `python3 build_single_file.py mmodinstall.sh`. Run the test suite and shell syntax checks before publishing a release. Installation logs are saved at `/var/log/mmod-install-*.log`.
 
-Administration includes password changes, Start/Stop/Restart/Reload for configured radio services, and whole-Dell reboot with confirmation. Extract `mmod-source.tar.gz` to access the source and tests.
+Administration includes password changes, Start/Stop/Restart/Reload for configured radio services, and system reboot with confirmation. Extract `mmod-source.tar.gz` to access the source and tests.
 
 Fresh installs: username **admin**, starter password **mmodadmin**. Press Enter to keep it during setup, or choose another password. Change it under Administration after signing in. New passwords require at least **6 characters**. Existing passwords are preserved on updates.
 
@@ -86,3 +86,16 @@ Latest V2 fixes: native Fusion and DMR2YSF controls are offered only when their 
 ## AllStarLink node control
 
 Open AllStarLink to view all configured nodes on one page. In Administration → AllStar nodes, add the node number, display name, private/ZeroTier AMI address, port, username and password. Existing passwords stay hidden; leave blank to retain them. Only administrators can add or remove nodes; signed-in operators can link, monitor and unlink. No node credentials are bundled. Updates preserve saved node settings. Keyed rows turn red and move above recently keyed rows, with one-second polling. Last-keyed ordering tracks activity observed since dashboard startup.
+
+
+## V2.0.1 dashboard-only installer
+
+Detects Debian-family Linux on x86-64, ARM64 and ARMv7/v8 with Python 3.10+ and systemd. No radio software or firmware is installed. ARM and WPSD support requires real-device validation; existing x86-64 deployments are the tested baseline. Unsupported platforms stop with an explanation.
+
+WPSD/Pi-Star detection uses a monitoring-only profile: use WPSD for radio settings and controls. Choose a free dashboard port; the installer refuses to take over an occupied port. MMOD's own Python dependencies may be installed.
+
+Local AllStar discovery reads rpt.conf and manager.conf (including local includes), tests existing AMI access, and adds only missing node entries. Existing nodes and credentials are retained. Credentials stay on the host. If access cannot be verified, configure it in Administration; no Asterisk account or permission is created automatically.
+
+## Radio configuration ownership
+
+MMOD does not create YSFGateway/MMDVM configuration overrides or write radio INI settings. YSF/FCS controls requiring those changes are unavailable; monitoring remains supported. BrandMeister API controls remain available. DMRGateway remote control must already be configured by the radio administrator. Dynamic timeout is limited to supported controls and excludes AllStar.
