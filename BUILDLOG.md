@@ -7,3 +7,6 @@ V2.0.1: dashboard-only platform detection, local AllStar discovery using existin
 
 ## V2.0.2
 Restored native YSF/FCS link/unlink using existing local MQTT or UDP interfaces. Commands are not retained; gateway host replies confirm the destination. Monitoring remains independent of MQTT. No radio configuration overrides, INI writes, or gateway restarts. Fixed idle caller rows incorrectly blocking control commands.
+
+### V2.0.2 control permission correction
+Allow dashboard requests when gateway INIs are private to the root worker; retain worker-side configuration validation. Idle last-caller rows no longer prevent inactivity processing. Correct native-control confirmation wording.
