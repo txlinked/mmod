@@ -52,7 +52,22 @@ cleanup() {
     tar -xzf "$backup/settings.tar.gz" -C /
     tar -xzf "$backup/dashboard.tar.gz" -C /
     tar -xzf "$backup/units.tar.gz" -C /
-    systemctl daemon-reload
+    # Preserve policy values while repairing ownership from older root-run tools.
+python3 - <<'POLICY_OWNER'
+import os,pwd,stat
+from pathlib import Path
+u=pwd.getpwnam('mmod')
+for name in ('gateway-policy.json','gateway-policy.lock'):
+ p=Path('/var/lib/mmod/state')/name
+ try:
+  fd=os.open(p,os.O_RDONLY|os.O_NOFOLLOW)
+ except FileNotFoundError:continue
+ try:
+  if not stat.S_ISREG(os.fstat(fd).st_mode):raise RuntimeError('Policy must be a regular file')
+  os.fchown(fd,u.pw_uid,u.pw_gid);os.fchmod(fd,0o600)
+ finally:os.close(fd)
+POLICY_OWNER
+systemctl daemon-reload
 systemctl enable --now mmod-allstar-directory.timer
 systemctl start --no-block mmod-allstar-directory.service
     systemctl start mmod mmod-radio mmod-collector.timer mmod-control.timer mmod-subscribers.timer mmod-directories.timer || true
