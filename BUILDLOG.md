@@ -23,3 +23,5 @@ Gateway-policy follow-up: repair legacy root-owned policy/lock files on install 
 Linked panel resilience: retain confirmed links when gateway-policy requests fail, display Policy unavailable, and hide policy toggles until the policy is readable.
 
 Installer/updater now configure explicit multi-network dashboard listeners on assigned 44net and private LAN/ZeroTier IPv4 addresses. Existing radio settings are preserved.
+
+AllStar directory refresh: allow slow downloads and automatically retry failed initial/daily refreshes after 60 seconds; retain the last valid directory on failure.
