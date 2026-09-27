@@ -102,3 +102,7 @@ MMOD does not create YSFGateway/MMDVM configuration overrides or write radio INI
 
 ### Static or dynamic YSF links
 Linked YSF/FCS rooms default to Dynamic, including the gateway startup room. Logged-in operators can select Make static to exclude a destination from MMOD inactivity disconnection, or Make dynamic to restart its timer. Choices persist in dashboard state and do not edit radio INIs. DMR2YSF timers reset on local RF activity, not network traffic. Native Fusion requires a compatible RF activity feed before automatic expiry is enabled. Static BrandMeister subscriptions and AllStar remain excluded.
+
+### Dashboard network access
+
+Installation and updates configure explicit listeners for assigned 44net (44/8), ZeroTier and private LAN IPv4 addresses, using the selected dashboard port. Additional addresses proxy to the main dashboard; login remains required for controls. No wildcard listeners or unrelated public addresses are added. Run `sudo python3 /opt/mmod/network_access.py` after interface addresses change. ZeroTier must already be installed, joined and assigned an address. Existing firewalls are not bypassed; allow the dashboard port on the intended interfaces if required.

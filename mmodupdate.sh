@@ -137,7 +137,7 @@ source="$stage/mmod"
 if ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
   /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
 fi
-for name in platform_detect.py discover_allstar.py idle_links.py app.py allstar.py allstar-directory.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
+for name in network_access.py platform_detect.py discover_allstar.py idle_links.py app.py allstar.py allstar-directory.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
   install -m 644 "$source/$name" /opt/mmod/
 done
 install -m 644 "$source"/static/* /opt/mmod/static/
@@ -162,6 +162,7 @@ systemctl start --no-block mmod-subscribers.service
 [[ "$platform_kind" == wpsd ]] || systemctl enable --now mmod-log-capture.service
 [[ "$platform_kind" == wpsd ]] || systemctl enable --now mmod-log-limit.timer
 systemctl start mmod-radio mmod
+python3 /opt/mmod/network_access.py
 python3 - <<'PY'
 import json,pathlib,time,urllib.request
 values=dict(line.split('=',1) for line in pathlib.Path('/etc/mmod/listen.env').read_text().splitlines() if '=' in line and not line.startswith('#'))

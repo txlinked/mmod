@@ -21,3 +21,5 @@ DMR2YSF native link and unlink guard only the selected timeslot; automatic expir
 Gateway-policy follow-up: repair legacy root-owned policy/lock files on install and update, preserving values and owner-only permissions. An unreadable or corrupt policy now returns unavailable rather than falsely reporting Dynamic.
 
 Linked panel resilience: retain confirmed links when gateway-policy requests fail, display Policy unavailable, and hide policy toggles until the policy is readable.
+
+Installer/updater now configure explicit multi-network dashboard listeners on assigned 44net and private LAN/ZeroTier IPv4 addresses. Existing radio settings are preserved.
