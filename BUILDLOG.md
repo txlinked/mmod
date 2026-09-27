@@ -19,3 +19,5 @@ Removed implicit startup-room timeout exemption. Added persistent authenticated 
 DMR2YSF native link and unlink guard only the selected timeslot; automatic expiry uses the same guard. Linked destinations wrap without the Static/Dynamic badge squeezing text. Explicit gateway Static/Dynamic choices persist, while dynamic defaults expire using the configured RF inactivity timer. Native gateway MQTT control uses the existing local broker and configuration, unique clean-session clients and non-retained commands. Fresh installs generate a unique administrator password; updates preserve credentials.
 
 Gateway-policy follow-up: repair legacy root-owned policy/lock files on install and update, preserving values and owner-only permissions. An unreadable or corrupt policy now returns unavailable rather than falsely reporting Dynamic.
+
+Linked panel resilience: retain confirmed links when gateway-policy requests fail, display Policy unavailable, and hide policy toggles until the policy is readable.
