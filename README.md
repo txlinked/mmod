@@ -106,3 +106,7 @@ Linked YSF/FCS rooms default to Dynamic, including the gateway startup room. Log
 ### Dashboard network access
 
 Installation and updates configure explicit listeners for assigned 44net (44/8), ZeroTier and private LAN IPv4 addresses, using the selected dashboard port. Additional addresses proxy to the main dashboard; login remains required for controls. No wildcard listeners or unrelated public addresses are added. Run `sudo python3 /opt/mmod/network_access.py` after interface addresses change. ZeroTier must already be installed, joined and assigned an address. Existing firewalls are not bypassed; allow the dashboard port on the intended interfaces if required.
+
+### Initial administrator login
+
+Fresh installs use username **admin** and password **mmodadmin**. The setup prompt lets you keep this default or choose another password. Updates preserve existing passwords. To reset an existing installation, run `sudo python3 /opt/mmod/admin.py` on that machine.

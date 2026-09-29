@@ -25,3 +25,5 @@ Linked panel resilience: retain confirmed links when gateway-policy requests fai
 Installer/updater now configure explicit multi-network dashboard listeners on assigned 44net and private LAN/ZeroTier IPv4 addresses. Existing radio settings are preserved.
 
 AllStar directory refresh: allow slow downloads and automatically retry failed initial/daily refreshes after 60 seconds; retain the last valid directory on failure.
+
+Restore owner-requested fresh-install credentials admin / mmodadmin. Existing credentials remain preserved during updates. Rebuild the embedded installer and source package with this default.
