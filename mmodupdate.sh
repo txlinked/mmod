@@ -10,9 +10,27 @@ fi
 verify=0
 [[ "${1:-}" != --verify-only ]] || verify=1
 [[ $# == 0 || ( $# == 1 && $verify == 1 ) ]] || { echo 'Unknown option'; exit 1; }
+# Install dashboard prerequisites before invoking Python, tar, curl or iproute2.
+mmod_require_packages() {
+  command -v apt-get >/dev/null && command -v dpkg-query >/dev/null || {
+    echo 'MMOD requires Debian/Ubuntu with apt-get and dpkg-query.' >&2; return 1;
+  }
+  local package status
+  local missing=()
+  for package in curl ca-certificates python3 python3-venv iproute2 tar coreutils util-linux; do
+    status=$(dpkg-query -W -f='${Status}' "$package" 2>/dev/null) || status=''
+    [[ "$status" == 'install ok installed' ]] || missing+=("$package")
+  done
+  if (( ${#missing[@]} )); then
+    printf 'Installing missing MMOD prerequisites: %s\n' "${missing[*]}"
+    apt-get update
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${missing[@]}"
+  fi
+}
 if [[ $verify == 0 ]]; then
   [[ $(id -u) == 0 ]] || { echo 'Run with sudo.'; exit 1; }
   [[ -x /opt/mmod/venv/bin/python && -f /etc/mmod/config.json ]] || { echo 'MMOD is not installed. Run mmodinstall.sh first.'; exit 1; }
+  mmod_require_packages
   exec 9>/run/lock/mmod-update.lock
   flock -n 9 || { echo 'Another MMOD update is running.'; exit 1; }
 fi

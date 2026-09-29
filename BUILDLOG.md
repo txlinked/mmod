@@ -27,3 +27,5 @@ Installer/updater now configure explicit multi-network dashboard listeners on as
 AllStar directory refresh: allow slow downloads and automatically retry failed initial/daily refreshes after 60 seconds; retain the last valid directory on failure.
 
 Restore owner-requested fresh-install credentials admin / mmodadmin. Existing credentials remain preserved during updates. Rebuild the embedded installer and source package with this default.
+
+Bootstrap fix: check/install missing system dependencies before Python, archive extraction or updater locking. Verification-only mode remains read-only.

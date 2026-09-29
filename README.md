@@ -110,3 +110,5 @@ Installation and updates configure explicit listeners for assigned 44net (44/8),
 ### Initial administrator login
 
 Fresh installs use username **admin** and password **mmodadmin**. The setup prompt lets you keep this default or choose another password. Updates preserve existing passwords. To reset an existing installation, run `sudo python3 /opt/mmod/admin.py` on that machine.
+
+The installer and updater check and install missing dashboard prerequisites automatically: curl, CA certificates, Python 3, Python venv, iproute2, tar, coreutils and util-linux. This installs missing packages only, not a full OS upgrade or radio software. To download the installer via HTTPS on a minimal system, install curl and ca-certificates first (or transfer the installer from another computer). `--verify-only` never installs packages.
