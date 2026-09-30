@@ -29,3 +29,5 @@ AllStar directory refresh: allow slow downloads and automatically retry failed i
 Restore owner-requested fresh-install credentials admin / mmodadmin. Existing credentials remain preserved during updates. Rebuild the embedded installer and source package with this default.
 
 Bootstrap fix: check/install missing system dependencies before Python, archive extraction or updater locking. Verification-only mode remains read-only.
+
+AllStar display: accept callsign identifiers in connection, mode, keying and received-status parsing. Keep numeric command validation and omit unsupported callsign unlink actions.
