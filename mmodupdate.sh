@@ -213,4 +213,5 @@ for unit in ysfgateway mmdvmhost mmdvm-host; do
     echo "Removed legacy MMOD override for $unit. Restart that radio service when idle to use its original configuration."
   fi
 done
+python3 /opt/mmod/link_status.py --prepare-access
 systemctl daemon-reload
