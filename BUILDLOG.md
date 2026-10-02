@@ -1,3 +1,7 @@
+## V2.0.4
+
+Administrator login update notification, stable GitHub release checks, manual update action, and optional automatic updates (off by default, 03:00 local schedule). Uses existing backup/preservation updater pinned to the designated stable commit. Updates do not restart radio services.
+
 ## V2.0.3
 
 Admin dynamic timer enable/disable switch. Default enabled at 15 minutes; existing minute settings preserved. Disabled timers do not queue disconnects; re-enabling starts a fresh interval. AllStar unaffected.

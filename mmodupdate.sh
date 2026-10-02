@@ -98,10 +98,14 @@ systemctl start --no-block mmod-allstar-directory.service
   exit "$result"
 }
 trap cleanup EXIT
-# Resolve main once so every downloaded release file comes from the same commit.
-curl --fail --silent --show-error --location --retry 2 --max-time 60 \
-  https://api.github.com/repos/txlinked/mmod/commits/main -o "$stage/commit.json"
-release=$(python3 -c 'import json,re,sys; s=json.load(open(sys.argv[1]))["sha"]; assert re.fullmatch("[a-f0-9]{40}",s); print(s)' "$stage/commit.json")
+# Web/automatic updates pin the designated stable commit; CLI defaults to main.
+if [[ -n "${MMOD_RELEASE:-}" ]]; then
+  [[ "$MMOD_RELEASE" =~ ^[a-f0-9]{40}$ ]] || { echo 'Invalid release commit'; exit 1; }
+  release="$MMOD_RELEASE"
+else
+  curl --fail --silent --show-error --location --retry 2 --max-time 60 https://api.github.com/repos/txlinked/mmod/commits/main -o "$stage/commit.json"
+  release=$(python3 -c 'import json,re,sys; s=json.load(open(sys.argv[1]))["sha"]; assert re.fullmatch("[a-f0-9]{40}",s); print(s)' "$stage/commit.json")
+fi
 echo "Downloading MMOD release $release"
 curl --fail --silent --show-error --location --retry 2 --max-time 180 \
   "https://raw.githubusercontent.com/txlinked/mmod/$release/mmod-source.tar.gz" -o "$stage/source.tar.gz"
@@ -155,7 +159,7 @@ source="$stage/mmod"
 if ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
   /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
 fi
-for name in network_access.py platform_detect.py discover_allstar.py idle_links.py app.py allstar.py allstar-directory.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
+for name in updates_api.py updates_worker.py network_access.py platform_detect.py discover_allstar.py idle_links.py app.py allstar.py allstar-directory.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
   install -m 644 "$source/$name" /opt/mmod/
 done
 install -m 644 "$source"/static/* /opt/mmod/static/
@@ -215,3 +219,5 @@ for unit in ysfgateway mmdvmhost mmdvm-host; do
 done
 python3 /opt/mmod/link_status.py --prepare-access
 systemctl daemon-reload
+
+systemctl enable --now mmod-updates.timer
