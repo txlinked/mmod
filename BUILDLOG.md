@@ -1,3 +1,7 @@
+## V2.0.3
+
+Admin dynamic timer enable/disable switch. Default enabled at 15 minutes; existing minute settings preserved. Disabled timers do not queue disconnects; re-enabling starts a fresh interval. AllStar unaffected.
+
 # MMOD release notes
 
 V2.0.0 includes radio monitoring, authenticated administration, AllStar node controls and directory lookups. The AllStar Received column displays time since a locally observed transmission.
