@@ -41,6 +41,9 @@ changing=0
 had_capture=0
 had_limit=0
 had_links=0
+had_network=0
+[[ ! -f /etc/systemd/system/mmod-network.socket ]] || had_network=1
+network_enabled=$(systemctl is-enabled mmod-network.socket 2>/dev/null || true)
 [[ ! -f /etc/systemd/system/mmod-links.service ]] || had_links=1
 [[ ! -f /etc/systemd/system/mmod-log-capture.service ]] || had_capture=1
 [[ ! -f /etc/systemd/system/mmod-log-limit.service ]] || had_limit=1
@@ -49,6 +52,11 @@ cleanup() {
   trap - EXIT
   if [[ $result != 0 && $changing == 1 ]]; then
     echo "Update failed. Restoring dashboard from $backup"
+    systemctl stop mmod-network.socket mmod-network.service 2>/dev/null || true
+    if [[ $had_network == 0 ]]; then
+      systemctl disable mmod-network.socket 2>/dev/null || true
+      rm -f /etc/systemd/system/mmod-network.socket /etc/systemd/system/mmod-network.service
+    fi
     systemctl stop mmod mmod-radio mmod-log-capture.service mmod-collector.timer mmod-control.timer mmod-collector.service mmod-control.service || true
     systemctl stop mmod-log-limit.timer mmod-log-limit.service 2>/dev/null || true
     if [[ $had_limit == 0 ]]; then
@@ -92,6 +100,7 @@ systemctl start --no-block mmod-allstar-directory.service
     [[ $had_capture == 0 ]] || systemctl start mmod-log-capture.service || true
     [[ $had_limit == 0 ]] || systemctl start mmod-log-limit.timer || true
     [[ $had_links == 0 ]] || systemctl start mmod-links.timer || true
+    [[ $network_enabled != enabled ]] || systemctl start mmod-network.socket || true
     echo 'Previous dashboard restored. Radio services were not restarted.'
   fi
   case "$stage" in /tmp/mmod-update.*) rm -rf -- "$stage" ;; esac
@@ -191,11 +200,13 @@ values=dict(line.split('=',1) for line in pathlib.Path('/etc/mmod/listen.env').r
 host=values['MMOD_BIND']
 if host=='0.0.0.0':host='127.0.0.1'
 url='http://'+host+':'+values.get('MMOD_PORT','8000')+'/api/health'
+config=json.loads(pathlib.Path('/etc/mmod/config.json').read_text())
+radio_required=bool(config.get('mmdvm_ini') and pathlib.Path(config['mmdvm_ini']).is_file())
 for attempt in range(30):
     try:
         result=json.load(urllib.request.urlopen(url,timeout=3))
-        radio=json.load(urllib.request.urlopen(url.replace('/api/health','/api/radio'),timeout=3))
-        if result['ok'] and not radio.get('error') and time.time()-radio['updated']<5:break
+        radio=json.load(urllib.request.urlopen(url.replace('/api/health','/api/radio'),timeout=3)) if radio_required else {}
+        if result['ok'] and (not radio_required or (not radio.get('error') and time.time()-radio['updated']<5)):break
     except (OSError,ValueError):pass
     time.sleep(1)
 else:raise RuntimeError('Dashboard health check failed')

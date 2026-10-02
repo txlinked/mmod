@@ -1,5 +1,7 @@
 ## V2.0.4
 
+Updater health checks support AllStar-only installations without an MMDVM log source. Rollback stops newly created proxy listeners before restoring prior bind settings.
+
 Administrator login update notification, stable GitHub release checks, manual update action, and optional automatic updates (off by default, 03:00 local schedule). Uses existing backup/preservation updater pinned to the designated stable commit. Updates do not restart radio services.
 
 ## V2.0.3
