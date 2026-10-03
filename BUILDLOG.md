@@ -41,3 +41,9 @@ Restore owner-requested fresh-install credentials admin / mmodadmin. Existing cr
 Bootstrap fix: check/install missing system dependencies before Python, archive extraction or updater locking. Verification-only mode remains read-only.
 
 AllStar display: accept callsign identifiers in connection, mode, keying and received-status parsing. Keep numeric command validation and omit unsupported callsign unlink actions.
+
+## V2.0.5 — recovered Administration configuration
+Recovered the earlier WPSD-style configuration panel. Restored allowlisted configuration writes through the root worker, revision checks, review, protected backups, blank-password preservation and explicit Apply. Added modem serial settings, baud rate, RF offsets and TG route editing. Configuration support is included in fresh installs and preserving updates.
+
+## V2.0.5 — recovered Administration configuration
+Recovered the earlier WPSD-style configuration panel. Restored allowlisted configuration writes through the root worker, revision checks, review, protected backups, blank-password preservation and explicit Apply. Added modem serial settings, baud rate, RF offsets and TG route editing. Configuration support is included in fresh installs and preserving updates.

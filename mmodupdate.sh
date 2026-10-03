@@ -168,7 +168,7 @@ source="$stage/mmod"
 if ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
   /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
 fi
-for name in updates_api.py updates_worker.py network_access.py platform_detect.py discover_allstar.py idle_links.py app.py allstar.py allstar-directory.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
+for name in configuration.py configuration_api.py configuration_setup.py updates_api.py updates_worker.py network_access.py platform_detect.py discover_allstar.py idle_links.py app.py allstar.py allstar-directory.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
   install -m 644 "$source/$name" /opt/mmod/
 done
 install -m 644 "$source"/static/* /opt/mmod/static/
@@ -185,6 +185,10 @@ fi
 systemctl daemon-reload
 systemctl enable --now mmod-allstar-directory.timer
 systemctl start --no-block mmod-allstar-directory.service
+python3 /opt/mmod/configuration_setup.py
+systemctl daemon-reload
+systemctl enable --now mmod-configuration.timer
+systemctl start mmod-configuration.service
 systemctl enable --now mmod-links.timer
 systemctl start --no-block mmod-links.service
 systemctl enable --now mmod-subscribers.timer mmod-directories.timer mmod-control.timer mmod-collector.timer
