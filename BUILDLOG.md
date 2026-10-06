@@ -1,3 +1,7 @@
+## V2.0.6
+
+Replace per-IP listeners with an IPv4 wildcard listener; retire fixed-address proxy sockets on install/update. Preserve the configured port and saved state. Installer no longer requires an IP selection.
+
 ## V2.0.4
 
 Updater health checks support AllStar-only installations without an MMDVM log source. Rollback stops newly created proxy listeners before restoring prior bind settings.

@@ -105,7 +105,7 @@ Linked YSF/FCS rooms default to Dynamic, including the gateway startup room. Log
 
 ### Dashboard network access
 
-Installation and updates configure explicit listeners for assigned 44net (44/8), ZeroTier and private LAN IPv4 addresses, using the selected dashboard port. Additional addresses proxy to the main dashboard; login remains required for controls. No wildcard listeners or unrelated public addresses are added. Run `sudo python3 /opt/mmod/network_access.py` after interface addresses change. ZeroTier must already be installed, joined and assigned an address. Existing firewalls are not bypassed; allow the dashboard port on the intended interfaces if required.
+Installation and updates listen on all IPv4 interfaces at the saved dashboard port. Address changes require no reconfiguration. Existing firewall rules still apply.
 
 ### Initial administrator login
 
@@ -116,3 +116,7 @@ The installer and updater check and install missing dashboard prerequisites auto
 ## Dashboard updates
 
 Administration > Dashboard updates checks the stable.json release manifest in txlinked/mmod. Check now refreshes the daily cache; Update now runs the existing preserving updater. Automatic updates default off and can be enabled with a local-system daily time (03:00 initially). If the computer misses that time it checks later that day. Failures are shown in Administration; the root-only log is /var/lib/mmod-updates/last-update.log. Settings and credentials are backed up by the updater. Radio software is not upgraded. Stable releases are pinned to an exact commit and updater checksum; commits alone do not trigger automatic upgrades.
+
+## V2.0.6 network access
+
+The installer and updater configure MMOD on 0.0.0.0, listening on every IPv4 interface at the saved web port (default 8000). LAN, ZeroTier, 44net, DHCP address changes and newly added interfaces work without regenerating listeners. This includes any public IPv4 interface present on the computer. Existing firewall/router rules still apply and are not changed. Legacy per-IP MMOD proxy sockets are disabled during migration; settings and port are preserved. Automatic updates remain opt-in.
