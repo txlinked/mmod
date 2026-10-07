@@ -120,3 +120,7 @@ Administration > Dashboard updates checks the stable.json release manifest in tx
 ## V2.0.7 network access
 
 The installer and updater configure MMOD on 0.0.0.0, listening on every IPv4 interface at the saved web port (default 8000). LAN, ZeroTier, 44net, DHCP address changes and newly added interfaces work without regenerating listeners. This includes any public IPv4 interface present on the computer. Existing firewall/router rules still apply and are not changed. Legacy per-IP MMOD proxy sockets are disabled during migration; settings and port are preserved. Automatic updates remain opt-in.
+
+## Per-link inactivity controls (V2.0.8)
+
+After signing in, expand Auto-disconnect beside a YSF/FCS linked room to enable or disable its RF inactivity timer and select 1–1440 minutes. BrandMeister dynamic groups use a whole-timeslot setting because clearing dynamic groups affects the entire slot. Blank minutes use the global default. The global enable switch is a master switch; static links and AllStar are exempt. Native Fusion is timed only when matching RF telemetry is available. Other modes do not advertise unsupported timeout control.
