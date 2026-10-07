@@ -236,3 +236,4 @@ python3 /opt/mmod/link_status.py --prepare-access
 systemctl daemon-reload
 
 systemctl enable --now mmod-updates.timer
+
