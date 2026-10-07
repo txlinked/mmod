@@ -1,3 +1,7 @@
+## V2.0.7 — Bridge caller recovery
+
+Recover per-slot callers from a bounded 10 MiB startup event window, ignoring debug audio noise. This lets existing duplicate-tail detection remove saved watchdog fragments after a restart. Unresolved DMR2YSF network ID 1 is displayed as Unknown bridge caller, retaining its raw ID without guessing another user.
+
 ## V2.0.6
 
 Replace per-IP listeners with an IPv4 wildcard listener; retire fixed-address proxy sockets on install/update. Preserve the configured port and saved state. Installer no longer requires an IP selection.
