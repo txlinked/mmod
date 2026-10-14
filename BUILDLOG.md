@@ -55,3 +55,5 @@ Recovered the earlier WPSD-style configuration panel. Restored allowlisted confi
 
 ## V2.0.5 — recovered Administration configuration
 Recovered the earlier WPSD-style configuration panel. Restored allowlisted configuration writes through the root worker, revision checks, review, protected backups, blank-password preservation and explicit Apply. Added modem serial settings, baud rate, RF offsets and TG route editing. Configuration support is included in fresh installs and preserving updates.
+
+AllStar Favorites fix: populate names from the node directory, resolve blank names on save, and preserve custom labels. Version unchanged.
