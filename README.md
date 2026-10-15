@@ -121,8 +121,10 @@ Administration > Dashboard updates checks the stable.json release manifest in tx
 
 The installer and updater configure MMOD on 0.0.0.0, listening on every IPv4 interface at the saved web port (default 8000). LAN, ZeroTier, 44net, DHCP address changes and newly added interfaces work without regenerating listeners. This includes any public IPv4 interface present on the computer. Existing firewall/router rules still apply and are not changed. Legacy per-IP MMOD proxy sockets are disabled during migration; settings and port are preserved. Automatic updates remain opt-in.
 
-## Per-link inactivity controls (V2.0.9)
+## Per-link inactivity controls (V2.0.10)
 
 After signing in, expand Auto-disconnect beside a YSF/FCS linked room to enable or disable its RF inactivity timer and select 1–1440 minutes. BrandMeister dynamic groups use a whole-timeslot setting because clearing dynamic groups affects the entire slot. Blank minutes use the global default. The global enable switch is a master switch; static links and AllStar are exempt. Native Fusion is timed only when matching RF telemetry is available. Other modes do not advertise unsupported timeout control.
 
 AllStar favorites: signed-in users can enter a destination node and a custom name, then click Save favorite. Saving does not change radio links. Existing unnamed favorites remain supported.
+
+V2.0.10 adds dynamic TGIF Link/Unlink for detected 6000000-prefix routes on TS1/TS2. Enter 5656 or 6005656; Unlink sends 4000. Requires TGIF connectivity and the same public source IP as the gateway. API acceptance is not audio verification. No radio INIs or firewall rules are changed by this feature.
