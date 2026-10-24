@@ -80,7 +80,7 @@ Gateway Activity uses country-only labels (USA, UK, and other country names) to 
 Administration activity is saved locally and accessible using **View admin log**, which opens a popup with the latest 40 entries. The log retains up to 2,000 entries.
 
 
-Latest V2 fixes: native Fusion and DMR2YSF controls are offered only when their configured gateway endpoints match. Native Fusion appears separately without a DMR timeslot. BrandMeister subscription changes check only the selected timeslot. Signed-in users can clear all dynamic TGs on a selected slot with confirmation; static groups remain unchanged. Control status now reports completion, worker errors, and connection failures in the linked-groups panel.
+V2.0.12 resets DMR2YSF runtime state after a confirmed MMOD YSF/FCS unlink, so RF on the same cross-mode talkgroup reconnects normally after automatic timeout or manual unlink. Radio configuration is preserved.\n\nLatest V2 fixes: native Fusion and DMR2YSF controls are offered only when their configured gateway endpoints match. Native Fusion appears separately without a DMR timeslot. BrandMeister subscription changes check only the selected timeslot. Signed-in users can clear all dynamic TGs on a selected slot with confirmation; static groups remain unchanged. Control status now reports completion, worker errors, and connection failures in the linked-groups panel.
 
 
 ## AllStarLink node control
