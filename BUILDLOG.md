@@ -1,3 +1,7 @@
+## V2.0.12 — DMR2YSF unlink state synchronization
+
+When MMOD unlinks a DMR2YSF-managed YSF/FCS room, the gateway and converter must agree that no room is active. After YSFGateway confirms the unlink, MMOD now try-restarts the active `dmr2ysf.service` while the radio is idle. This clears the converter's cached talkgroup state so later RF on the same talkgroup reconnects normally. Applies to automatic inactivity timeout and manual MMOD unlink. Native YSF is unchanged; radio INI/configuration files are not modified.
+
 ## V2.0.7 — Bridge caller recovery
 
 Recover per-slot callers from a bounded 10 MiB startup event window, ignoring debug audio noise. This lets existing duplicate-tail detection remove saved watchdog fragments after a restart. Unresolved DMR2YSF network ID 1 is displayed as Unknown bridge caller, retaining its raw ID without guessing another user.
