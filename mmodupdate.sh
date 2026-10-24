@@ -237,7 +237,8 @@ if host=='0.0.0.0':host='127.0.0.1'
 url='http://'+host+':'+values.get('MMOD_PORT','8000')+'/api/health'
 config=json.loads(pathlib.Path('/etc/mmod/config.json').read_text())
 radio_required=bool(config.get('mmdvm_ini') and pathlib.Path(config['mmdvm_ini']).is_file())
-for attempt in range(30):
+# Allow slower hosts to finish bounded radio-history startup before rollback.
+for attempt in range(90):
     try:
         result=json.load(urllib.request.urlopen(url,timeout=3))
         radio=json.load(urllib.request.urlopen(url.replace('/api/health','/api/radio'),timeout=3)) if radio_required else {}
