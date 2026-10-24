@@ -2181,6 +2181,41 @@ kK5GgppDxYxgEg5NQ0eQRxgFanGGAZE8dsxNOEfbl4jh/gbOtgpgwVRGG36Vc7kXNB9G87wOH1xf
 MMOD_EMBEDDED_PAYLOAD
 printf '%s  %s\n' '75652117804a6cddc857f5938f6d0859cdb88a2ae4d458162b720b964c22ea2a' "$mmod_stage/payload.tar.gz" | sha256sum --check --status
 tar -xzf "$mmod_stage/payload.tar.gz" --no-same-owner -C "$mmod_stage"
+python3 - "$mmod_stage/mmod" <<'MMOD_V2012_PATCH'
+import pathlib,sys
+source=pathlib.Path(sys.argv[1])
+# MMOD V2.0.12: keep DMR2YSF runtime state synchronized with external gateway unlink.
+vf=source/'v2_radio.py'
+vt=vf.read_text()
+old="""    actual=native_host(c,kind,port,command)
+    if actual!=expected:raise ValueError('Gateway has not confirmed the requested destination; refresh link status')
+    return 'Gateway confirmed '+('unlink' if expected=='NONE' else 'link to '+actual)+' using local '+kind.upper()+'. Radio configuration unchanged.'
+"""
+new="""    actual=native_host(c,kind,port,command)
+    if actual!=expected:raise ValueError('Gateway has not confirmed the requested destination; refresh link status')
+    state_reset=''
+    if expected=='NONE' and job.get('mode')=='dmr2ysf':
+        # MMOD controls YSFGateway externally. Reset DMR2YSF so its cached m_lastTG
+        # cannot suppress a later RF reconnect to the same talkgroup.
+        system('try-restart','dmr2ysf.service')
+        state_reset=' DMR2YSF state reset.'
+    return 'Gateway confirmed '+('unlink' if expected=='NONE' else 'link to '+actual)+' using local '+kind.upper()+'.'+state_reset+' Radio configuration unchanged.'
+"""
+if old in vt:
+    vf.write_text(vt.replace(old,new,1))
+elif 'DMR2YSF state reset.' not in vt:
+    raise ValueError('V2.0.12 DMR2YSF unlink patch target not found')
+(source/'VERSION').write_text('2.0.12\n')
+bl=source/'BUILDLOG.md'
+note="""## V2.0.12 — DMR2YSF unlink state synchronization
+
+When MMOD unlinks a DMR2YSF-managed YSF/FCS room, the gateway and converter must agree that no room is active. After YSFGateway confirms the unlink, MMOD now try-restarts the active dmr2ysf.service while the radio is idle. This clears the converter's cached talkgroup state so later RF on the same talkgroup reconnects normally. Applies to automatic inactivity timeout and manual MMOD unlink. Native YSF is unchanged; radio INI/configuration files are not modified.
+
+"""
+bt=bl.read_text()
+if not bt.startswith('## V2.0.12'):
+    bl.write_text(note+bt)
+MMOD_V2012_PATCH
 test -f "$mmod_stage/mmod/install.sh"
 test -f "$mmod_stage/mmod/install_wizard.py"
 test -f "$mmod_stage/mmod/static/index.html"
