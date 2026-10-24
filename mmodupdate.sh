@@ -196,9 +196,17 @@ systemctl stop mmod-log-capture.service 2>/dev/null || true
 systemctl stop mmod-log-limit.timer mmod-log-limit.service 2>/dev/null || true
 systemctl stop mmod mmod-radio mmod-collector.timer mmod-control.timer mmod-collector.service mmod-control.service
 source="$stage/mmod"
-if ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
-  /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
+# An OS Python upgrade can invalidate a venv even when requirements are unchanged.
+repair_venv=0
+/opt/mmod/venv/bin/python -c 'import uvicorn, fastapi' 2>/dev/null || repair_venv=1
+if [[ $repair_venv == 1 ]] || ! cmp -s "$source/requirements.lock" /opt/mmod/requirements.lock; then
+  (
+    umask 022
+    [[ $repair_venv == 0 ]] || python3 -m venv /opt/mmod/venv
+    /opt/mmod/venv/bin/python -m pip install --disable-pip-version-check --no-cache-dir -r "$source/requirements.lock"
+  )
 fi
+runuser -u mmod -- /opt/mmod/venv/bin/python -c 'import uvicorn, fastapi' 
 for name in configuration.py configuration_api.py configuration_setup.py updates_api.py updates_worker.py network_access.py platform_detect.py discover_allstar.py idle_links.py app.py allstar.py allstar-directory.py accounts.py v2_api.py v2_radio.py brandmeister.py discover_controls.py link_status.py radio.py log_capture.py log_limit.py collector.py control.py admin.py directories.py subscriber-update.py setup_config.py requirements.txt requirements.lock VERSION README.md BUILDLOG.md ADVANCED-SETUP.md INSTALL-DELL-3040.md LICENSE; do
   install -m 644 "$source/$name" /opt/mmod/
 done
