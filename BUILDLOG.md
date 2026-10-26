@@ -1,3 +1,7 @@
+## V2.0.13 — Dashboard version and directory refresh fixes
+
+Health responses now read the installed VERSION file. Directory downloads have a 50-second total deadline covering DNS and slow response bodies; failed downloads preserve cached entries. The installer and updater use the packaged version without rewriting it. Automatic inactivity disconnect remains opt-in, and saved settings are preserved.
+
 ## V2.0.12 — DMR2YSF unlink state synchronization
 
 When MMOD unlinks a DMR2YSF-managed YSF/FCS room, the gateway and converter must agree that no room is active. After YSFGateway confirms the unlink, MMOD now try-restarts the active `dmr2ysf.service` while the radio is idle. This clears the converter's cached talkgroup state so later RF on the same talkgroup reconnects normally. Applies to automatic inactivity timeout and manual MMOD unlink. Native YSF is unchanged; radio INI/configuration files are not modified.

@@ -132,37 +132,6 @@ with tarfile.open(stage/'source.tar.gz') as archive:
         target.parent.mkdir(parents=True,exist_ok=True)
         target.write_bytes(archive.extractfile(member).read())
 source=stage/'mmod'
-# MMOD V2.0.12: keep DMR2YSF runtime state synchronized with external gateway unlink.
-vf=source/'v2_radio.py'
-vt=vf.read_text()
-old="""    actual=native_host(c,kind,port,command)
-    if actual!=expected:raise ValueError('Gateway has not confirmed the requested destination; refresh link status')
-    return 'Gateway confirmed '+('unlink' if expected=='NONE' else 'link to '+actual)+' using local '+kind.upper()+'. Radio configuration unchanged.'
-"""
-new="""    actual=native_host(c,kind,port,command)
-    if actual!=expected:raise ValueError('Gateway has not confirmed the requested destination; refresh link status')
-    state_reset=''
-    if expected=='NONE' and job.get('mode')=='dmr2ysf':
-        # MMOD controls YSFGateway externally. Reset DMR2YSF so its cached m_lastTG
-        # cannot suppress a later RF reconnect to the same talkgroup.
-        system('try-restart','dmr2ysf.service')
-        state_reset=' DMR2YSF state reset.'
-    return 'Gateway confirmed '+('unlink' if expected=='NONE' else 'link to '+actual)+' using local '+kind.upper()+'.'+state_reset+' Radio configuration unchanged.'
-"""
-if old in vt:
-    vf.write_text(vt.replace(old,new,1))
-elif 'DMR2YSF state reset.' not in vt:
-    raise ValueError('V2.0.12 DMR2YSF unlink patch target not found')
-(source/'VERSION').write_text('2.0.12\n')
-bl=source/'BUILDLOG.md'
-note="""## V2.0.12 — DMR2YSF unlink state synchronization
-
-When MMOD unlinks a DMR2YSF-managed YSF/FCS room, the gateway and converter must agree that no room is active. After YSFGateway confirms the unlink, MMOD now try-restarts the active dmr2ysf.service while the radio is idle. This clears the converter's cached talkgroup state so later RF on the same talkgroup reconnects normally. Applies to automatic inactivity timeout and manual MMOD unlink. Native YSF is unchanged; radio INI/configuration files are not modified.
-
-"""
-bt=bl.read_text()
-if not bt.startswith('## V2.0.12'):
-    bl.write_text(note+bt)
 for name in ['idle_links.py','allstar.py','static/allstar.js','static/allstar.css','accounts.py','v2_api.py','v2_radio.py','brandmeister.py','discover_controls.py','link_status.py','systemd/mmod-links.timer','static/v2.js','static/links.js','app.py','radio.py','log_capture.py','log_limit.py','systemd/mmod-log-limit.timer','systemd/mmod-log-capture.service','collector.py','control.py','directories.py','static/index.html','static/app.js','static/mobile.css','requirements.lock','systemd/mmod.service']:
     if not (source/name).is_file():raise ValueError('Incomplete release: '+name)
 for path in source.glob('*.py'):compile(path.read_text(),str(path),'exec')
