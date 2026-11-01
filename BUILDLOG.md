@@ -1,3 +1,7 @@
+## V2.0.14 — Radio monitor CPU reduction
+
+Cache bounded timestamp conversions and cross-mode log records by file modification time and size. Preserve live timers and invalidate on log changes. No radio configuration changes.
+
 ## V2.0.13 â€” Dashboard version and directory refresh fixes
 
 Health responses now read the installed VERSION file. Directory downloads have a 50-second total deadline covering DNS and slow response bodies; failed downloads preserve cached entries. The installer and updater use the packaged version without rewriting it. Automatic inactivity disconnect remains opt-in, and saved settings are preserved.
